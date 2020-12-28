@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import pl.vehiclerental.restapi.models.PersonalInformation;
 import pl.vehiclerental.restapi.models.User;
 
 public class UserDetailsImpl implements UserDetails {
@@ -21,18 +22,21 @@ public class UserDetailsImpl implements UserDetails {
 
     private String email;
 
+    private PersonalInformation personalInformation;
+
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String username, String email, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+                           PersonalInformation personalInformation, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.personalInformation = personalInformation;
     }
 
     public static UserDetailsImpl build(User user) {
@@ -45,6 +49,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getPersonalInformation(),
                 authorities);
     }
 
@@ -69,6 +74,10 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public PersonalInformation getPersonalInformation() {
+        return personalInformation;
     }
 
     @Override

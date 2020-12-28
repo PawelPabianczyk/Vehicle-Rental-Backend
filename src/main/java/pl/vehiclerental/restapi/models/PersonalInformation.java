@@ -42,6 +42,9 @@ public class PersonalInformation {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public PersonalInformation() {
+    }
+
     public PersonalInformation(String firstName, String lastName, String address, String city,
                                String country, String phone) {
         this.firstName = firstName;
