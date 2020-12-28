@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.vehiclerental.restapi.models.ERole;
+import pl.vehiclerental.restapi.models.PersonalInformation;
 import pl.vehiclerental.restapi.models.Role;
 import pl.vehiclerental.restapi.models.User;
 import pl.vehiclerental.restapi.payload.request.LoginRequest;
@@ -87,9 +88,19 @@ public class AuthController {
         }
 
         // Create new user's account
+        PersonalInformation pi = new PersonalInformation(
+                signUpRequest.getFirstName(),
+                signUpRequest.getLastName(),
+                signUpRequest.getAddress(),
+                signUpRequest.getCity(),
+                signUpRequest.getCountry(),
+                signUpRequest.getPhone()
+        );
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()),
+                pi);
+        pi.setUser(user);
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();

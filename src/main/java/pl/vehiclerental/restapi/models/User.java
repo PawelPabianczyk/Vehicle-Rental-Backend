@@ -32,6 +32,12 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, optional = false)
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "personal_information_id")
+    private PersonalInformation personalInformation;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -41,10 +47,11 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, PersonalInformation pi) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.personalInformation = pi;
     }
 
     public Long getId() {
@@ -78,6 +85,27 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public PersonalInformation getPersonalInformation() {
+        return personalInformation;
+    }
+
+    public void setPersonalInformation(PersonalInformation personalInformation) {
+        if (personalInformation == null) {
+            if (this.personalInformation != null) {
+                this.personalInformation.setUser(null);
+            }
+        }
+        else {
+            personalInformation.setUser(this);
+        }
+        this.personalInformation = personalInformation;
+    }
+
+
+//    public void setPersonalInformation(PersonalInformation personalInformation) {
+//        this.personalInformation = personalInformation;
+//    }
 
     public Set<Role> getRoles() {
         return roles;
