@@ -34,8 +34,6 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, optional = false)
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "personal_information_id")
     private PersonalInformation personalInformation;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -101,11 +99,6 @@ public class User {
         }
         this.personalInformation = personalInformation;
     }
-
-
-//    public void setPersonalInformation(PersonalInformation personalInformation) {
-//        this.personalInformation = personalInformation;
-//    }
 
     public Set<Role> getRoles() {
         return roles;

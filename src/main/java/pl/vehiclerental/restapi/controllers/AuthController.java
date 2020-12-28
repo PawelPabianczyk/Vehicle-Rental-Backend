@@ -28,6 +28,7 @@ import pl.vehiclerental.restapi.payload.request.LoginRequest;
 import pl.vehiclerental.restapi.payload.request.SignupRequest;
 import pl.vehiclerental.restapi.payload.response.JwtResponse;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
+import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
 import pl.vehiclerental.restapi.repository.RoleRepository;
 import pl.vehiclerental.restapi.repository.UserRepository;
 import pl.vehiclerental.restapi.security.jwt.JwtUtils;
@@ -45,6 +46,9 @@ public class AuthController {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    PersonalInformationRepository personalInformationRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -85,6 +89,12 @@ public class AuthController {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
+        }
+
+        if (personalInformationRepository.existsByPhone(signUpRequest.getPhone())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Phone number is already in use!"));
         }
 
         // Create new user's account

@@ -40,8 +40,6 @@ public class PersonalInformation {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-//    @OneToOne(mappedBy = "personalInformation", cascade = CascadeType.ALL,
-//            fetch = FetchType.LAZY, optional = false)
     private User user;
 
     public PersonalInformation(String firstName, String lastName, String address, String city,
@@ -109,16 +107,4 @@ public class PersonalInformation {
     public void setUser(User user) {
         this.user = user;
     }
-
-//    public void setUser(User user) {
-//        if (user == null) {
-//            if (this.user != null) {
-//                this.user.setPersonalInformation(null);
-//            }
-//        }
-//        else {
-//            user.setPersonalInformation(this);
-//        }
-//        this.user = user;
-//    }
 }
