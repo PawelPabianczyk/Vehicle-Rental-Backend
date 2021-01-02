@@ -8,6 +8,7 @@ import pl.vehiclerental.restapi.payload.request.AddVehicleRequest;
 import pl.vehiclerental.restapi.payload.request.SignupRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.CategoryRepository;
+import pl.vehiclerental.restapi.repository.InspectionRepository;
 import pl.vehiclerental.restapi.repository.InsuranceRepository;
 import pl.vehiclerental.restapi.repository.VehicleRepository;
 
@@ -30,6 +31,8 @@ public class VehicleController {
     @Autowired
     InsuranceRepository insuranceRepository;
 
+    @Autowired
+    InspectionRepository inspectionRepository;
 
     @GetMapping("/all")
     public List<Vehicle> getVehicles() {
@@ -91,9 +94,15 @@ public class VehicleController {
 
         insuranceRepository.save(insurance);
 
-//        Set<Insurance> insurances = new HashSet<>();
-//        insurances.add(insurance);
-//        vehicle.setInsurances(insurances);
+        Inspection inspection = new Inspection(
+                addVehicleRequest.getCarInStartDate(),
+                addVehicleRequest.getCarInExpDate(),
+                addVehicleRequest.getCarInPrice()
+        );
+
+        inspection.setVehicle(vehicle);
+
+        inspectionRepository.save(inspection);
 
         vehicleRepository.save(vehicle);
 
