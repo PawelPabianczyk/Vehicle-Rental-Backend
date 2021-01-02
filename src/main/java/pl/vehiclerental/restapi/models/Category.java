@@ -1,8 +1,6 @@
 package pl.vehiclerental.restapi.models;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(	name = "categories")
@@ -14,9 +12,6 @@ public class Category {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private ECategory name;
-
-    @OneToMany(mappedBy="category")
-    private Set<Vehicle> vehicles = new HashSet<>();
 
     public Category() {
 
@@ -40,13 +35,5 @@ public class Category {
 
     public void setName(ECategory name) {
         this.name = name;
-    }
-
-    public Set<Vehicle> getVehicles() {
-        return vehicles;
-    }
-
-    public void setVehicles(Set<Vehicle> vehicles) {
-        this.vehicles = vehicles;
     }
 }

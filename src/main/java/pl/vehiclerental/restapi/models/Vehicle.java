@@ -6,10 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(	name = "vehicles")
@@ -48,9 +44,6 @@ public class Vehicle {
     @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
     @JoinColumn(name="category_id")
     private Category category;
-
-    @OneToMany(mappedBy="vehicle")
-    private Set<Insurance> insurances = new HashSet<>();
 
     public Vehicle() {
     }
@@ -137,13 +130,5 @@ public class Vehicle {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public Set<Insurance> getInsurances() {
-        return insurances;
-    }
-
-    public void setInsurances(Set<Insurance> insurances) {
-        this.insurances = insurances;
     }
 }

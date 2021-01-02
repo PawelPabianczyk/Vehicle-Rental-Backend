@@ -91,9 +91,9 @@ public class VehicleController {
 
         insuranceRepository.save(insurance);
 
-        Set<Insurance> insurances = new HashSet<>();
-        insurances.add(insurance);
-        vehicle.setInsurances(insurances);
+//        Set<Insurance> insurances = new HashSet<>();
+//        insurances.add(insurance);
+//        vehicle.setInsurances(insurances);
 
         vehicleRepository.save(vehicle);
 
