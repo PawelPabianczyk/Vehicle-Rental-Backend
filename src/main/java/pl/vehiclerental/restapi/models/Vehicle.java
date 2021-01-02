@@ -5,48 +5,122 @@ import org.hibernate.validator.constraints.URL;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(	name = "vehicles",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "brand")
-        })
+@Table(	name = "vehicles")
 public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 50)
     private String brand;
+
+    @NotBlank
+    @Size(max = 50)
+    private String model;
+
+    private LocalDate yearOfProduction;
+
+    @NotBlank
+    @Size(max = 50)
+    private String country;
+
+    private Double power;
+
+    private Double dailyCost;
+
+    @NotBlank
+    @Size(max = 50)
+    private String description;
 
     @NotBlank
     @Size(max = 2083)
     @URL
     private String url;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+    @JoinColumn(name="category_id")
+    private Category category;
+
+    @OneToMany(mappedBy="vehicle")
+    private Set<Insurance> insurances = new HashSet<>();
+
     public Vehicle() {
     }
 
-    public Vehicle(String brand, String url) {
+    public Vehicle(String brand, String model, LocalDate yearOfProduction,
+                   String country, Double power, Double dailyCost, String description, String url) {
         this.brand = brand;
+        this.model = model;
+        this.yearOfProduction = yearOfProduction;
+        this.country = country;
+        this.power = power;
+        this.dailyCost = dailyCost;
+        this.description = description;
         this.url = url;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getbrand() {
+    public String getBrand() {
         return brand;
     }
 
-    public void setbrand(String brand) {
+    public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public LocalDate getYearOfProduction() {
+        return yearOfProduction;
+    }
+
+    public void setYearOfProduction(LocalDate yearOfProduction) {
+        this.yearOfProduction = yearOfProduction;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Double getPower() {
+        return power;
+    }
+
+    public void setPower(Double power) {
+        this.power = power;
+    }
+
+    public Double getDailyCost() {
+        return dailyCost;
+    }
+
+    public void setDailyCost(Double dailyCost) {
+        this.dailyCost = dailyCost;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getUrl() {
@@ -55,5 +129,21 @@ public class Vehicle {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Set<Insurance> getInsurances() {
+        return insurances;
+    }
+
+    public void setInsurances(Set<Insurance> insurances) {
+        this.insurances = insurances;
     }
 }

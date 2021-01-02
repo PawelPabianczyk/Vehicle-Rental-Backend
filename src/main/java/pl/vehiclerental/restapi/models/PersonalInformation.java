@@ -22,6 +22,8 @@ public class PersonalInformation {
     @Size(max = 50)
     private String lastName;
 
+    //TODO dodac date urodzenia
+
     @NotBlank
     @Size(max = 50)
     private String address;

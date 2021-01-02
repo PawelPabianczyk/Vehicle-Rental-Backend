@@ -28,9 +28,7 @@ import pl.vehiclerental.restapi.payload.request.LoginRequest;
 import pl.vehiclerental.restapi.payload.request.SignupRequest;
 import pl.vehiclerental.restapi.payload.response.JwtResponse;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
-import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
-import pl.vehiclerental.restapi.repository.RoleRepository;
-import pl.vehiclerental.restapi.repository.UserRepository;
+import pl.vehiclerental.restapi.repository.*;
 import pl.vehiclerental.restapi.security.jwt.JwtUtils;
 import pl.vehiclerental.restapi.security.services.UserDetailsImpl;
 
