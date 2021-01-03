@@ -97,6 +97,7 @@ public class AuthController {
         PersonalInformation pi = new PersonalInformation(
                 signUpRequest.getFirstName(),
                 signUpRequest.getLastName(),
+                signUpRequest.getBirthdate(),
                 signUpRequest.getAddress(),
                 signUpRequest.getCity(),
                 signUpRequest.getCountry(),

@@ -1,7 +1,9 @@
 package pl.vehiclerental.restapi.payload.request;
 
+import org.apache.tomcat.jni.Local;
 import pl.vehiclerental.restapi.models.PersonalInformation;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import javax.validation.constraints.*;
@@ -22,6 +24,8 @@ public class SignupRequest {
     @NotBlank
     @Size(max = 50)
     private String lastName;
+
+    private LocalDate birthdate;
 
     @NotBlank
     @Size(max = 50)
@@ -83,6 +87,14 @@ public class SignupRequest {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
     }
 
     public String getAddress() {

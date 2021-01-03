@@ -3,6 +3,7 @@ package pl.vehiclerental.restapi.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 @Entity
 @Table(	name = "personal_information",
@@ -22,7 +23,7 @@ public class PersonalInformation {
     @Size(max = 50)
     private String lastName;
 
-    //TODO dodac date urodzenia
+    private LocalDate birthdate;
 
     @NotBlank
     @Size(max = 50)
@@ -47,10 +48,11 @@ public class PersonalInformation {
     public PersonalInformation() {
     }
 
-    public PersonalInformation(String firstName, String lastName, String address, String city,
+    public PersonalInformation(String firstName, String lastName,LocalDate birthdate ,String address, String city,
                                String country, String phone) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.birthdate = birthdate;
         this.address = address;
         this.city = city;
         this.country = country;
@@ -71,6 +73,14 @@ public class PersonalInformation {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
     }
 
     public String getAddress() {
