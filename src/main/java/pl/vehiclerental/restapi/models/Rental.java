@@ -21,6 +21,10 @@ public class Rental {
     @JoinColumn(name="vehicle_id")
     private Vehicle vehicle;
 
+    @OneToOne(mappedBy = "rental", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private Complaint complaint;
+
     public Rental(LocalDate startDate, LocalDate endDate, double cost) {
         this.startDate = startDate;
         this.endDate = endDate;
