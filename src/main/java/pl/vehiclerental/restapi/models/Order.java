@@ -27,6 +27,10 @@ public class Order {
             inverseJoinColumns = @JoinColumn(name = "rental_id"))
     private Set<Rental> rentals = new HashSet<>();
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, optional = false)
+    private Payment payment;
+
     public Order(String comments, LocalDate date, double cost, String paymentStatus) {
         this.comments = comments;
         this.date = date;
