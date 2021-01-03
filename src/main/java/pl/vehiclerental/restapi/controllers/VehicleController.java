@@ -5,17 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.models.*;
 import pl.vehiclerental.restapi.payload.request.AddVehicleRequest;
-import pl.vehiclerental.restapi.payload.request.SignupRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
-import pl.vehiclerental.restapi.repository.CategoryRepository;
-import pl.vehiclerental.restapi.repository.InspectionRepository;
-import pl.vehiclerental.restapi.repository.InsuranceRepository;
-import pl.vehiclerental.restapi.repository.VehicleRepository;
+import pl.vehiclerental.restapi.repository.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -91,7 +85,6 @@ public class VehicleController {
                 addVehicleRequest.getPrice()
         );
         insurance.setVehicle(vehicle);
-
         insuranceRepository.save(insurance);
 
         Inspection inspection = new Inspection(
@@ -99,13 +92,10 @@ public class VehicleController {
                 addVehicleRequest.getCarInExpDate(),
                 addVehicleRequest.getCarInPrice()
         );
-
         inspection.setVehicle(vehicle);
-
         inspectionRepository.save(inspection);
 
         vehicleRepository.save(vehicle);
-
         return ResponseEntity.ok(new MessageResponse("Vehicle added successfully!"));
     }
 }

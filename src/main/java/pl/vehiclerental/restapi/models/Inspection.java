@@ -7,7 +7,6 @@ import java.time.LocalDate;
 @Table(	name = "inspections")
 public class Inspection {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
