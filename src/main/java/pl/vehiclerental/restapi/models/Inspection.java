@@ -12,7 +12,7 @@ public class Inspection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate dateOfPurchase;
+    private LocalDate startDate;
 
     private LocalDate expirationDate;
 
@@ -25,18 +25,18 @@ public class Inspection {
     public Inspection() {
     }
 
-    public Inspection(LocalDate dateOfPurchase, LocalDate expirationDate, double price) {
-        this.dateOfPurchase = dateOfPurchase;
+    public Inspection(LocalDate startDate, LocalDate expirationDate, double price) {
+        this.startDate = startDate;
         this.expirationDate = expirationDate;
         this.price = price;
     }
 
-    public LocalDate getDateOfPurchase() {
-        return dateOfPurchase;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setDateOfPurchase(LocalDate dateOfPurchase) {
-        this.dateOfPurchase = dateOfPurchase;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public LocalDate getExpirationDate() {
