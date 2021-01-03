@@ -15,7 +15,7 @@ public class AddVehicleRequest {
     @Size(max = 50)
     private String model;
 
-    private LocalDate year;
+    private String year;
 
     @NotBlank
     @Size(max = 50)
@@ -60,11 +60,11 @@ public class AddVehicleRequest {
         this.model = model;
     }
 
-    public LocalDate getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(LocalDate year) {
+    public void setYear(String year) {
         this.year = year;
     }
 

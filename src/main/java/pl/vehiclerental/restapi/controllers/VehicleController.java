@@ -9,6 +9,7 @@ import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -36,10 +37,12 @@ public class VehicleController {
     @PostMapping("/add")
     public ResponseEntity<?> addVehicle(@Valid @RequestBody AddVehicleRequest addVehicleRequest) {
 
+        int year = Integer.parseInt(addVehicleRequest.getYear());
+
         Vehicle vehicle = new Vehicle(
                 addVehicleRequest.getBrand(),
                 addVehicleRequest.getModel(),
-                addVehicleRequest.getYear(),
+                LocalDate.of(year,1,1),
                 addVehicleRequest.getCountry(),
                 addVehicleRequest.getPower(),
                 addVehicleRequest.getPrice(),
@@ -50,29 +53,35 @@ public class VehicleController {
         String strCategory = addVehicleRequest.getCategory();
 
         switch (strCategory) {
-            case "sedan":
+            case "Sedan":
                 Category sedanCategory = categoryRepository.findByName(ECategory.SEDAN)
                         .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
                 vehicle.setCategory(sedanCategory);
 
                 break;
-            case "coupe":
+            case "Coupe":
                 Category coupeCategory = categoryRepository.findByName(ECategory.COUPE)
                         .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
                 vehicle.setCategory(coupeCategory);
 
                 break;
 
-            case "sports":
+            case "Sports":
                 Category sportsCategory = categoryRepository.findByName(ECategory.SPORTS)
                         .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
                 vehicle.setCategory(sportsCategory);
 
                 break;
-            case "HATCHBACK":
+            case "Hatchback":
                 Category hatchbackCategory = categoryRepository.findByName(ECategory.HATCHBACK)
                         .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
                 vehicle.setCategory(hatchbackCategory);
+
+                break;
+                case "SUV":
+                Category suvCategory = categoryRepository.findByName(ECategory.SUV)
+                        .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
+                vehicle.setCategory(suvCategory);
 
                 break;
             default:

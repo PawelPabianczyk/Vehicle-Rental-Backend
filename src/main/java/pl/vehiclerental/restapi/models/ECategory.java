@@ -4,5 +4,6 @@ public enum ECategory {
     SEDAN,
     COUPE,
     SPORTS,
-    HATCHBACK
+    HATCHBACK,
+    SUV
 }
