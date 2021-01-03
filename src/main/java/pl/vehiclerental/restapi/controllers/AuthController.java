@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.vehiclerental.restapi.models.ERole;
-import pl.vehiclerental.restapi.models.PersonalInformation;
-import pl.vehiclerental.restapi.models.Role;
-import pl.vehiclerental.restapi.models.User;
+import pl.vehiclerental.restapi.models.*;
 import pl.vehiclerental.restapi.payload.request.LoginRequest;
 import pl.vehiclerental.restapi.payload.request.SignupRequest;
 import pl.vehiclerental.restapi.payload.response.JwtResponse;
@@ -141,14 +138,12 @@ public class AuthController {
 
                         break;
                     default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
+                        throw new RuntimeException("Error: Role is not found.");
                 }
             });
         }
-
         user.setRoles(roles);
+
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
