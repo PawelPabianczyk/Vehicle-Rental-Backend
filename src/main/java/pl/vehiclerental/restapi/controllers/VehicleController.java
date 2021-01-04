@@ -42,7 +42,7 @@ public class VehicleController {
         Vehicle vehicle = new Vehicle(
                 addVehicleRequest.getBrand(),
                 addVehicleRequest.getModel(),
-                LocalDate.of(year,1,1),
+                year,
                 addVehicleRequest.getCountry(),
                 addVehicleRequest.getPower(),
                 addVehicleRequest.getPrice(),

@@ -22,7 +22,7 @@ public class Vehicle {
     @Size(max = 50)
     private String model;
 
-    private LocalDate yearOfProduction;
+    private int yearOfProduction;
 
     @NotBlank
     @Size(max = 50)
@@ -48,7 +48,7 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    public Vehicle(String brand, String model, LocalDate yearOfProduction,
+    public Vehicle(String brand, String model, int yearOfProduction,
                    String country, Double power, Double dailyCost, String description, String url) {
         this.brand = brand;
         this.model = model;
@@ -76,11 +76,11 @@ public class Vehicle {
         this.model = model;
     }
 
-    public LocalDate getYearOfProduction() {
+    public int getYearOfProduction() {
         return yearOfProduction;
     }
 
-    public void setYearOfProduction(LocalDate yearOfProduction) {
+    public void setYearOfProduction(int yearOfProduction) {
         this.yearOfProduction = yearOfProduction;
     }
 
