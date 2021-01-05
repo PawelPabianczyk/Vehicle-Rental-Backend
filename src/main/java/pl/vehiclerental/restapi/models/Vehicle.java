@@ -33,7 +33,6 @@ public class Vehicle {
     private Double dailyCost;
 
     @NotBlank
-    @Size(max = 50)
     private String description;
 
     @NotBlank
