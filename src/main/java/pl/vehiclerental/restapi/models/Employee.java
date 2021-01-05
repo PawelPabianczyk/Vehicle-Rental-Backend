@@ -10,7 +10,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private int bonus;
+    private double bonus;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
     @JoinColumn(name="boss_id")
@@ -20,6 +20,10 @@ public class Employee {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+    @JoinColumn(name="job_id")
+    private Job job;
+
     public Employee() {
     }
 
@@ -28,11 +32,11 @@ public class Employee {
         this.employee = employee;
     }
 
-    public int getBonus() {
+    public double getBonus() {
         return bonus;
     }
 
-    public void setBonus(int bonus) {
+    public void setBonus(double bonus) {
         this.bonus = bonus;
     }
 
@@ -50,5 +54,13 @@ public class Employee {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
     }
 }
