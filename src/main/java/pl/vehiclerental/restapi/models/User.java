@@ -36,6 +36,14 @@ public class User {
             fetch = FetchType.LAZY, optional = false)
     private PersonalInformation personalInformation;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST,
+            fetch = FetchType.LAZY)
+    private Employee employee;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST,
+            fetch = FetchType.LAZY)
+    private Customer customer;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -98,6 +106,22 @@ public class User {
             personalInformation.setUser(this);
         }
         this.personalInformation = personalInformation;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Set<Role> getRoles() {
