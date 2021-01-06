@@ -10,9 +10,11 @@ import pl.vehiclerental.restapi.models.Employee;
 import pl.vehiclerental.restapi.models.Job;
 import pl.vehiclerental.restapi.models.PersonalInformation;
 import pl.vehiclerental.restapi.models.User;
-import pl.vehiclerental.restapi.payload.request.AddVehicleRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
-import pl.vehiclerental.restapi.repository.*;
+import pl.vehiclerental.restapi.repository.EmployeeRepository;
+import pl.vehiclerental.restapi.repository.JobRepository;
+import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
+import pl.vehiclerental.restapi.repository.UserRepository;
 
 import javax.validation.Valid;
 import java.util.List;
