@@ -33,15 +33,15 @@ public class User {
     private String password;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+            fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
     private PersonalInformation personalInformation;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST,
-            fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, orphanRemoval = true)
     private Employee employee;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST,
-            fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, orphanRemoval = true)
     private Customer customer;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -49,6 +49,8 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    private Boolean isActive;
 
     public User() {
     }
@@ -130,5 +132,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

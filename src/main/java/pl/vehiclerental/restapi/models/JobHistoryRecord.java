@@ -1,5 +1,7 @@
 package pl.vehiclerental.restapi.models;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -15,7 +17,7 @@ public class JobHistoryRecord {
 
     private LocalDate endDate;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="employee_id")
     private Employee employee;
 

@@ -45,6 +45,8 @@ public class PersonalInformation {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private Boolean isActive;
+
     public PersonalInformation() {
     }
 
@@ -121,5 +123,13 @@ public class PersonalInformation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

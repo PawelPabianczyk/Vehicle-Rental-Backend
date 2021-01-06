@@ -31,7 +31,7 @@ public class VehicleController {
 
     @GetMapping("/all")
     public List<Vehicle> getVehicles() {
-        return vehicleRepository.findAll();
+        return (List<Vehicle>) vehicleRepository.findAll();
     }
 
     @PostMapping("/add")

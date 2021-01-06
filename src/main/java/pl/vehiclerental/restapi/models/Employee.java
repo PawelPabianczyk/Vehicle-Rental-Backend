@@ -8,28 +8,38 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private double bonus;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
-    @JoinColumn(name="boss_id")
-    private Employee employee;
+    private Boolean isActive;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="boss_id")
+    private Employee boss;
+
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="job_id")
     private Job job;
 
     public Employee() {
     }
 
-    public Employee(int bonus, Employee employee) {
+    public Employee(int bonus, Employee boss) {
         this.bonus = bonus;
-        this.employee = employee;
+        this.boss = boss;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public double getBonus() {
@@ -40,12 +50,12 @@ public class Employee {
         this.bonus = bonus;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public Employee getBoss() {
+        return boss;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setBoss(Employee boss) {
+        this.boss = boss;
     }
 
     public User getUser() {
@@ -62,5 +72,13 @@ public class Employee {
 
     public void setJob(Job job) {
         this.job = job;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }
