@@ -12,6 +12,8 @@ public class EmployeeDto {
 
     private Long jobId;
 
+    private Boolean isActive;
+
     public EmployeeDto() {
     }
 
@@ -61,5 +63,13 @@ public class EmployeeDto {
 
     public void setJobId(Long jobId) {
         this.jobId = jobId;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

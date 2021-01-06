@@ -5,12 +5,14 @@ import org.springframework.stereotype.Repository;
 import pl.vehiclerental.restapi.models.Customer;
 import pl.vehiclerental.restapi.models.User;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByUser(User user);
 
-    Optional<Customer> findById(int id);
+    List<Customer> findAllByIsActive(Boolean isActive);
+
 
 }

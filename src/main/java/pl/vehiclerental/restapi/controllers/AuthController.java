@@ -133,9 +133,9 @@ public class AuthController {
                         break;
 
                     case "employee":
-                        Role employeeRole = roleRepository.findByName(ERole.ROLE_EMPLOYEE)
+                        Role regularRole = roleRepository.findByName(ERole.ROLE_REGULAR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(employeeRole);
+                        roles.add(regularRole);
 
                         break;
                     default:
