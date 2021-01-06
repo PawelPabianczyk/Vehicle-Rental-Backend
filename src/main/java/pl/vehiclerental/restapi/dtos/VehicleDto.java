@@ -1,66 +1,27 @@
-package pl.vehiclerental.restapi.models;
+package pl.vehiclerental.restapi.dtos;
 
-import org.hibernate.validator.constraints.URL;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.time.LocalDate;
-
-@Entity
-@Table(	name = "vehicles")
-public class Vehicle {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class VehicleDto {
     private Long id;
 
-    @NotBlank
-    @Size(max = 50)
     private String brand;
 
-    @NotBlank
-    @Size(max = 50)
     private String model;
 
     private int yearOfProduction;
 
-    @NotBlank
-    @Size(max = 50)
     private String country;
 
     private Double power;
 
     private Double price;
 
-    @NotBlank
     private String description;
 
-    @NotBlank
-    @Size(max = 2083)
-    @URL
     private String pictureUrl;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
-    @JoinColumn(name="category_id")
-    private Category category;
+    private String category;
 
     private Boolean isActive;
-
-    public Vehicle() {
-    }
-
-    public Vehicle(String brand, String model, int yearOfProduction,
-                   String country, Double power, Double price, String description, String pictureUrl) {
-        this.brand = brand;
-        this.model = model;
-        this.yearOfProduction = yearOfProduction;
-        this.country = country;
-        this.power = power;
-        this.price = price;
-        this.description = description;
-        this.pictureUrl = pictureUrl;
-        this.isActive=true;
-    }
 
     public Long getId() {
         return id;
@@ -134,11 +95,11 @@ public class Vehicle {
         this.pictureUrl = pictureUrl;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 

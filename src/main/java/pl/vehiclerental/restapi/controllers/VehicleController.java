@@ -1,16 +1,24 @@
 package pl.vehiclerental.restapi.controllers;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.vehiclerental.restapi.dtos.InspectionDto;
+import pl.vehiclerental.restapi.dtos.InsuranceDto;
+import pl.vehiclerental.restapi.dtos.VehicleDto;
 import pl.vehiclerental.restapi.models.*;
 import pl.vehiclerental.restapi.payload.request.AddVehicleRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
-import pl.vehiclerental.restapi.repository.*;
+import pl.vehiclerental.restapi.repository.CategoryRepository;
+import pl.vehiclerental.restapi.repository.InspectionRepository;
+import pl.vehiclerental.restapi.repository.InsuranceRepository;
+import pl.vehiclerental.restapi.repository.VehicleRepository;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -30,55 +38,74 @@ public class VehicleController {
     InspectionRepository inspectionRepository;
 
     @GetMapping("/all")
-    public List<Vehicle> getVehicles() {
-        return (List<Vehicle>) vehicleRepository.findAll();
+    @PreAuthorize("hasRole('REGULAR')")
+    public List<VehicleDto> getAllVehicles() {
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        return vehicles.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/active")
+    public List<VehicleDto> getAllActiveVehicles() {
+        List<Vehicle> vehicles = vehicleRepository.findAllByIsActive(true);
+        return vehicles.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private VehicleDto convertToDto(Vehicle vehicle){
+        VehicleDto vehicleDto = new ModelMapper().map(vehicle, VehicleDto.class);
+        vehicleDto.setCategory(vehicle.getCategory().getName().name());
+        return vehicleDto;
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('REGULAR')")
     public ResponseEntity<?> addVehicle(@Valid @RequestBody AddVehicleRequest addVehicleRequest) {
 
-        int year = Integer.parseInt(addVehicleRequest.getYear());
+        VehicleDto vehicleDto = addVehicleRequest.getVehicleDto();
 
         Vehicle vehicle = new Vehicle(
-                addVehicleRequest.getBrand(),
-                addVehicleRequest.getModel(),
-                year,
-                addVehicleRequest.getCountry(),
-                addVehicleRequest.getPower(),
-                addVehicleRequest.getPrice(),
-                addVehicleRequest.getDescription(),
-                addVehicleRequest.getPictureURL()
+                vehicleDto.getBrand(),
+                vehicleDto.getModel(),
+                vehicleDto.getYearOfProduction(),
+                vehicleDto.getCountry(),
+                vehicleDto.getPower(),
+                vehicleDto.getPrice(),
+                vehicleDto.getDescription(),
+                vehicleDto.getPictureUrl()
         );
 
-        String strCategory = addVehicleRequest.getCategory();
+        String strCategory = vehicleDto.getCategory();
 
         switch (strCategory) {
-            case "Sedan":
+            case "SEDAN":
                 Category sedanCategory = categoryRepository.findByName(ECategory.SEDAN)
                         .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
                 vehicle.setCategory(sedanCategory);
 
                 break;
-            case "Coupe":
+            case "COUPE":
                 Category coupeCategory = categoryRepository.findByName(ECategory.COUPE)
                         .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
                 vehicle.setCategory(coupeCategory);
 
                 break;
 
-            case "Sports":
+            case "SPORTS":
                 Category sportsCategory = categoryRepository.findByName(ECategory.SPORTS)
                         .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
                 vehicle.setCategory(sportsCategory);
 
                 break;
-            case "Hatchback":
+            case "HATCHBACK":
                 Category hatchbackCategory = categoryRepository.findByName(ECategory.HATCHBACK)
                         .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
                 vehicle.setCategory(hatchbackCategory);
 
                 break;
-                case "SUV":
+            case "SUV":
                 Category suvCategory = categoryRepository.findByName(ECategory.SUV)
                         .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
                 vehicle.setCategory(suvCategory);
@@ -88,18 +115,22 @@ public class VehicleController {
                 throw new RuntimeException("Error: Category is not found.");
         }
 
+        InsuranceDto insuranceDto = addVehicleRequest.getInsuranceDto();
+
         Insurance insurance = new Insurance(
-                addVehicleRequest.getInStartDate(),
-                addVehicleRequest.getInExpDate(),
-                addVehicleRequest.getPrice()
+                insuranceDto.getDateOfPurchase(),
+                insuranceDto.getExpirationDate(),
+                insuranceDto.getPrice()
         );
         insurance.setVehicle(vehicle);
         insuranceRepository.save(insurance);
 
+        InspectionDto inspectionDto = addVehicleRequest.getInspectionDto();
+
         Inspection inspection = new Inspection(
-                addVehicleRequest.getCarInStartDate(),
-                addVehicleRequest.getCarInExpDate(),
-                addVehicleRequest.getCarInPrice()
+                inspectionDto.getStartDate(),
+                inspectionDto.getExpirationDate(),
+                inspectionDto.getPrice()
         );
         inspection.setVehicle(vehicle);
         inspectionRepository.save(inspection);
