@@ -21,13 +21,17 @@ public class Inspection {
     @JoinColumn(name="vehicle_id")
     private Vehicle vehicle;
 
+    private Boolean isActive;
+
     public Inspection() {
+        this.isActive = true;
     }
 
     public Inspection(LocalDate startDate, LocalDate expirationDate, double price) {
         this.startDate = startDate;
         this.expirationDate = expirationDate;
         this.price = price;
+        this.isActive = true;
     }
 
     public LocalDate getStartDate() {
@@ -60,5 +64,21 @@ public class Inspection {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }
