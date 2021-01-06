@@ -29,9 +29,10 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(int bonus, Employee boss) {
+    public Employee(double bonus, Employee boss) {
         this.bonus = bonus;
         this.boss = boss;
+        this.setActive(true);
     }
 
     public Long getId() {

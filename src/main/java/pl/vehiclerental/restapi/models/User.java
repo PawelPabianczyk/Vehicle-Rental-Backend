@@ -60,6 +60,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.personalInformation = pi;
+        this.setActive(true);
     }
 
     public Long getId() {

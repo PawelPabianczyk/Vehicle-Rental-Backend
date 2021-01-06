@@ -7,10 +7,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.dtos.EmployeeDto;
 import pl.vehiclerental.restapi.models.Employee;
+import pl.vehiclerental.restapi.models.Job;
 import pl.vehiclerental.restapi.models.PersonalInformation;
 import pl.vehiclerental.restapi.models.User;
+import pl.vehiclerental.restapi.payload.request.AddVehicleRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +31,22 @@ public class EmployeeController {
 
     @Autowired
     PersonalInformationRepository personalInformationRepository;
+
+    @Autowired
+    JobRepository jobRepository;
+
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<?> addEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
+        Employee boss = employeeRepository.findById(employeeDto.getBossId()).get();
+        Employee employee = new Employee(employeeDto.getBonus(),boss);
+        User user = userRepository.findById(employeeDto.getUserId()).get();
+        employee.setUser(user);
+        Job job = jobRepository.findById(employeeDto.getJobId()).get();
+        employee.setJob(job);
+        employeeRepository.save(employee);
+        return ResponseEntity.ok(new MessageResponse("Employee added successfully!"));
+    }
 
     @GetMapping("/active")
     @PreAuthorize("hasRole('MANAGER')")

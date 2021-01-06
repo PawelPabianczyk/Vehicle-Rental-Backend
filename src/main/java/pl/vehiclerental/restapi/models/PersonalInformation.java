@@ -59,6 +59,7 @@ public class PersonalInformation {
         this.city = city;
         this.country = country;
         this.phone = phone;
+        this.setActive(true);
     }
 
     public String getFirstName() {
