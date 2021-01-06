@@ -1,14 +1,8 @@
-package pl.vehiclerental.restapi.models;
+package pl.vehiclerental.restapi.dtos;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(	name = "insurances")
-public class Insurance {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class InsuranceDto {
     private Long id;
 
     private LocalDate dateOfPurchase;
@@ -17,21 +11,16 @@ public class Insurance {
 
     private double price;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
-    @JoinColumn(name="vehicle_id")
-    private Vehicle vehicle;
+    private Long vehicleId;
 
     private Boolean isActive;
 
-    public Insurance() {
-        this.isActive = true;
+    public Long getId() {
+        return id;
     }
 
-    public Insurance(LocalDate dateOfPurchase, LocalDate expirationDate, double price) {
-        this.dateOfPurchase = dateOfPurchase;
-        this.expirationDate = expirationDate;
-        this.price = price;
-        this.isActive = true;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getDateOfPurchase() {
@@ -58,20 +47,12 @@ public class Insurance {
         this.price = price;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public Long getVehicleId() {
+        return vehicleId;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setVehicleId(Long vehicleId) {
+        this.vehicleId = vehicleId;
     }
 
     public Boolean getActive() {
