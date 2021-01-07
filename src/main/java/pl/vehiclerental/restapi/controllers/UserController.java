@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.vehiclerental.restapi.dtos.EmployeeDto;
+import pl.vehiclerental.restapi.dtos.PersonalInformationDto;
 import pl.vehiclerental.restapi.dtos.UserDto;
+import pl.vehiclerental.restapi.models.PersonalInformation;
 import pl.vehiclerental.restapi.models.Role;
 import pl.vehiclerental.restapi.models.User;
+import pl.vehiclerental.restapi.payload.response.AllUsersData;
+import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
 import pl.vehiclerental.restapi.repository.UserRepository;
 
 import java.util.HashSet;
@@ -26,16 +30,31 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    PersonalInformationRepository personalInformationRepository;
+
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserDto> getAllUsers() {
-        List<User> users = (List<User>) userRepository.findAll();
-        return users.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public AllUsersData getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<PersonalInformation> personalInformationData = personalInformationRepository.findAll();
+        return new AllUsersData(
+                users.stream()
+                        .map(this::convertToDto)
+                        .collect(Collectors.toList()),
+                personalInformationData.stream()
+                        .map(this::convertToDto)
+                        .collect(Collectors.toList()));
+
     }
 
-    private UserDto convertToDto(User user){
+    private PersonalInformationDto convertToDto(PersonalInformation personalInformation) {
+        PersonalInformationDto personalInformationDto = new ModelMapper().map(personalInformation, PersonalInformationDto.class);
+        personalInformationDto.setUserId(personalInformation.getUser().getId());
+        return personalInformationDto;
+    }
+
+    private UserDto convertToDto(User user) {
         UserDto userDto = new ModelMapper().map(user, UserDto.class);
         userDto.setPersonalInformationId(user.getPersonalInformation().getId());
 
@@ -50,17 +69,15 @@ public class UserController {
 
         userDto.setRoles(userDtoRoles);
 
-        if(user.getCustomer() != null){
+        if (user.getCustomer() != null) {
             userDto.setCustomerId(user.getCustomer().getId());
-        }
-        else{
+        } else {
             userDto.setCustomerId(null);
         }
 
-        if(user.getEmployee() != null){
+        if (user.getEmployee() != null) {
             userDto.setEmployeeId(user.getEmployee().getId());
-        }
-        else{
+        } else {
             userDto.setEmployeeId(null);
         }
 

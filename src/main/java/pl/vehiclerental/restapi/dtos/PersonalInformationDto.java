@@ -1,59 +1,34 @@
-package pl.vehiclerental.restapi.models;
+package pl.vehiclerental.restapi.dtos;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-@Entity
-@Table(	name = "personal_information",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "phone")
-        })
-public class PersonalInformation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PersonalInformationDto {
     private Long id;
 
-    @Size(max = 50)
     private String firstName;
 
-    @Size(max = 50)
     private String lastName;
 
     private LocalDate birthdate;
 
-    @Size(max = 50)
     private String address;
 
-    @Size(max = 50)
     private String city;
 
-    @Size(max = 50)
     private String country;
 
-    @Size(max = 50)
     private String phone;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Long userId;
 
     private Boolean isActive;
 
-    public PersonalInformation() {
+    public Long getId() {
+        return id;
     }
 
-    public PersonalInformation(String firstName, String lastName,LocalDate birthdate ,String address, String city,
-                               String country, String phone) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthdate = birthdate;
-        this.address = address;
-        this.city = city;
-        this.country = country;
-        this.phone = phone;
-        this.setActive(true);
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -112,12 +87,12 @@ public class PersonalInformation {
         this.phone = phone;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Boolean getActive() {
@@ -126,13 +101,5 @@ public class PersonalInformation {
 
     public void setActive(Boolean active) {
         isActive = active;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }
