@@ -133,4 +133,12 @@ public class PersonalInformation {
     public void setActive(Boolean active) {
         isActive = active;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
