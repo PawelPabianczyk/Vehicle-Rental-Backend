@@ -1,15 +1,12 @@
 package pl.vehiclerental.restapi.controllers;
 
-import javafx.scene.canvas.GraphicsContext;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.dtos.CustomerDto;
-import pl.vehiclerental.restapi.dtos.EmployeeDto;
 import pl.vehiclerental.restapi.models.Customer;
-import pl.vehiclerental.restapi.models.Employee;
 import pl.vehiclerental.restapi.models.PersonalInformation;
 import pl.vehiclerental.restapi.models.User;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
@@ -35,7 +32,7 @@ public class CustomerController {
     PersonalInformationRepository personalInformationRepository;
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('REGULAR')")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<CustomerDto> getAllCustomers() {
         List<Customer> customers = (List<Customer>) customerRepository.findAll();
         return customers.stream()
@@ -50,7 +47,7 @@ public class CustomerController {
     }
 
     @PostMapping("/deactivate")
-    @PreAuthorize("hasRole('REGULAR')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deactivateCustomer(@RequestBody CustomerDto customerDto){
         Customer customer = customerRepository.findById(customerDto.getId()).get();
         customer.setActive(false);
@@ -68,7 +65,7 @@ public class CustomerController {
     }
 
     @PostMapping("/activate")
-    @PreAuthorize("hasRole('REGULAR')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> activateEmployee(@RequestBody CustomerDto customerDto){
         Customer customer = customerRepository.findById(customerDto.getId()).get();
         customer.setActive(true);

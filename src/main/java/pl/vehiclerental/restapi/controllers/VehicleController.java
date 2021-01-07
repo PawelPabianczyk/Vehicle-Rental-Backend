@@ -16,7 +16,6 @@ import pl.vehiclerental.restapi.repository.InspectionRepository;
 import pl.vehiclerental.restapi.repository.InsuranceRepository;
 import pl.vehiclerental.restapi.repository.VehicleRepository;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +37,7 @@ public class VehicleController {
     InspectionRepository inspectionRepository;
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('REGULAR')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
     public List<VehicleDto> getAllVehicles() {
         List<Vehicle> vehicles = vehicleRepository.findAll();
         return vehicles.stream()
@@ -61,8 +60,8 @@ public class VehicleController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<?> addVehicle(@Valid @RequestBody AddVehicleRequest addVehicleRequest) {
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<?> addVehicle(@RequestBody AddVehicleRequest addVehicleRequest) {
 
         VehicleDto vehicleDto = addVehicleRequest.getVehicleDto();
 

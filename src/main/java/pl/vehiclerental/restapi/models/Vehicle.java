@@ -14,17 +14,14 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Size(max = 50)
     private String brand;
 
-    @NotBlank
     @Size(max = 50)
     private String model;
 
     private int yearOfProduction;
 
-    @NotBlank
     @Size(max = 50)
     private String country;
 
@@ -32,10 +29,8 @@ public class Vehicle {
 
     private Double price;
 
-    @NotBlank
     private String description;
 
-    @NotBlank
     @Size(max = 2083)
     @URL
     private String pictureUrl;
