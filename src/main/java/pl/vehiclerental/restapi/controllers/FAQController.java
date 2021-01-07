@@ -35,7 +35,13 @@ public class FAQController {
 
     private FAQDto convertToDto(FAQ faq){
         FAQDto faqDto = new ModelMapper().map(faq, FAQDto.class);
-        faqDto.setEmployeeId(faq.getEmployee().getId());
+        //TODO usunac potem
+        if(faq.getEmployee() == null){
+            faqDto.setEmployeeId(null);
+        }
+        else{
+            faqDto.setEmployeeId(faq.getEmployee().getId());
+        }
         return faqDto;
     }
 }
