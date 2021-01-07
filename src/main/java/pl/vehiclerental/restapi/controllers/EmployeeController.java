@@ -62,7 +62,7 @@ public class EmployeeController {
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     public List<EmployeeDto> getAllEmployees() {
-        List<Employee> employees = (List<Employee>) employeeRepository.findAll();
+        List<Employee> employees = employeeRepository.findAll();
         return employees.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

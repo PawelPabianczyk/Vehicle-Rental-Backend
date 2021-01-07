@@ -1,22 +1,13 @@
-package pl.vehiclerental.restapi.models;
+package pl.vehiclerental.restapi.dtos;
 
-import javax.persistence.*;
-
-@Entity
-@Table(	name = "FAQs")
-public class FAQ {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class FAQDto {
     private Long id;
 
     private String question;
 
     private String answer;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
-    @JoinColumn(name="employee_id")
-    private Employee employee;
+    private Long employeeId;
 
     public Long getId() {
         return id;
@@ -42,11 +33,11 @@ public class FAQ {
         this.answer = answer;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 }
