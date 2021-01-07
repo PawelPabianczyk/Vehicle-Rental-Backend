@@ -4,6 +4,7 @@ import pl.vehiclerental.restapi.models.PersonalInformation;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.List;
 
 public class JwtResponse {
@@ -86,6 +87,14 @@ public class JwtResponse {
 
     public void setAddress(String address) {
         this.personalInformation.setAddress(address);
+    }
+
+    public LocalDate getBirthdate() {
+        return personalInformation.getBirthdate();
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        personalInformation.setBirthdate(birthdate);
     }
 
     public String getCity() {
