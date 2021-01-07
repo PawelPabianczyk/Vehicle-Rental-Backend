@@ -61,7 +61,7 @@ public class VehicleController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('REGULAR')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> addVehicle(@Valid @RequestBody AddVehicleRequest addVehicleRequest) {
 
         VehicleDto vehicleDto = addVehicleRequest.getVehicleDto();

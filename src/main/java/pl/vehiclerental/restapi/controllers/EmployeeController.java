@@ -38,7 +38,7 @@ public class EmployeeController {
     JobRepository jobRepository;
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
         Employee boss = employeeRepository.findById(employeeDto.getBossId()).get();
         Employee employee = new Employee(employeeDto.getBonus(),boss);
