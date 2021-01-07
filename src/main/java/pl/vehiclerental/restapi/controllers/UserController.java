@@ -56,7 +56,8 @@ public class UserController {
 
     private UserDto convertToDto(User user) {
         UserDto userDto = new ModelMapper().map(user, UserDto.class);
-        userDto.setPersonalInformationId(user.getPersonalInformation().getId());
+        PersonalInformation pi = personalInformationRepository.findByUser(user).get();
+        userDto.setPersonalInformationId(pi.getId());
 
         Set<String> userDtoRoles = new HashSet<>();
 
