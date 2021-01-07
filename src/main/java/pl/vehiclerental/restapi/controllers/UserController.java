@@ -7,13 +7,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.vehiclerental.restapi.dtos.EmployeeDto;
-import pl.vehiclerental.restapi.dtos.PersonalInformationDto;
 import pl.vehiclerental.restapi.dtos.UserDto;
 import pl.vehiclerental.restapi.models.PersonalInformation;
 import pl.vehiclerental.restapi.models.Role;
 import pl.vehiclerental.restapi.models.User;
-import pl.vehiclerental.restapi.payload.response.AllUsersData;
 import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
 import pl.vehiclerental.restapi.repository.UserRepository;
 
@@ -35,23 +32,12 @@ public class UserController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public AllUsersData getAllUsers() {
+    public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-        List<PersonalInformation> personalInformationData = personalInformationRepository.findAll();
-        return new AllUsersData(
-                users.stream()
+        return users.stream()
                         .map(this::convertToDto)
-                        .collect(Collectors.toList()),
-                personalInformationData.stream()
-                        .map(this::convertToDto)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList());
 
-    }
-
-    private PersonalInformationDto convertToDto(PersonalInformation personalInformation) {
-        PersonalInformationDto personalInformationDto = new ModelMapper().map(personalInformation, PersonalInformationDto.class);
-        personalInformationDto.setUserId(personalInformation.getUser().getId());
-        return personalInformationDto;
     }
 
     private UserDto convertToDto(User user) {
