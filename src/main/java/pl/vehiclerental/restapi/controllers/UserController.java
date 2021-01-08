@@ -8,16 +8,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import pl.vehiclerental.restapi.dtos.JobHistoryRecordDto;
+import pl.vehiclerental.restapi.models.JobHistoryRecord;
 import pl.vehiclerental.restapi.models.Role;
 import pl.vehiclerental.restapi.models.User;
 import pl.vehiclerental.restapi.payload.request.UpdateUserRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
-import pl.vehiclerental.restapi.repository.CustomerRepository;
-import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
-import pl.vehiclerental.restapi.repository.RoleRepository;
-import pl.vehiclerental.restapi.repository.UserRepository;
+import pl.vehiclerental.restapi.repository.*;
 import pl.vehiclerental.restapi.utilities.Converter;
 
+import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,28 @@ public class UserController {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    JobHistoryRecordRepository jobHistoryRecordRepository;
+
+    @PostMapping("/logOut")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> logOut(@Valid @RequestBody JobHistoryRecordDto record) {
+
+        User user = userRepository.findById(record.getUserId()).get();
+        if (user.getEmployee() != null) {
+            JobHistoryRecord jobHistoryRecord = new JobHistoryRecord();
+            jobHistoryRecord.setStartDate(record.getStartDate());
+            jobHistoryRecord.setEndDate(LocalDate.now());
+            jobHistoryRecord.setEmployee(user.getEmployee());
+            jobHistoryRecordRepository.save(jobHistoryRecord);
+            return ResponseEntity.ok(new MessageResponse("Job history record added successfully!"));
+        }
+
+
+        System.out.println(jobHistoryRecordRepository.findById(1L).get().getEndDate());
+        return ResponseEntity.ok(new MessageResponse("User logged out successfully!"));
+    }
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
@@ -118,8 +141,8 @@ public class UserController {
 
     @PostMapping("/deactivate")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deactivateUser(@RequestBody Long id){
-        User user = userRepository.findById(id).get();
+    public ResponseEntity<?> deactivateUser(@RequestBody String id){
+        User user = userRepository.findById(Long.parseLong(id)).get();
         user.setActive(false);
 
         if(user.getEmployee() != null){
@@ -138,8 +161,8 @@ public class UserController {
 
     @PostMapping("/activate")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> activateUser(@RequestBody Long id){
-        User user = userRepository.findById(id).get();
+    public ResponseEntity<?> activateUser(@RequestBody String id){
+        User user = userRepository.findById(Long.parseLong(id)).get();
         user.setActive(true);
 
         if(user.getEmployee() != null){
