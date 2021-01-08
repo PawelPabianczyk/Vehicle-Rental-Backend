@@ -52,9 +52,9 @@ public class UserController {
         for (User u :
                 users) {
             jUser = new JSONObject();
+            jUser.put("id", u.getId());
             jUser.put("username", u.getUsername());
             jUser.put("email", u.getEmail());
-            jUser.put("isActive", u.getActive());
             jUser.put("isActive", u.getActive());
 
             Set<String> roles = new HashSet<>();

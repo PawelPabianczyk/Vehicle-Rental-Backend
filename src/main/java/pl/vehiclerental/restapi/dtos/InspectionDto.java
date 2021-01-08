@@ -6,7 +6,6 @@ public class InspectionDto {
 
     private Long id;
 
-    //TODO date json
     private LocalDate startDate;
 
     private LocalDate expirationDate;

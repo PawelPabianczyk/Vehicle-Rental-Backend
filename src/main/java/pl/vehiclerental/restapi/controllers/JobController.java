@@ -7,16 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.vehiclerental.restapi.dtos.CustomerDto;
 import pl.vehiclerental.restapi.dtos.JobDto;
-import pl.vehiclerental.restapi.models.Customer;
 import pl.vehiclerental.restapi.models.Job;
-import pl.vehiclerental.restapi.models.PersonalInformation;
-import pl.vehiclerental.restapi.models.User;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.JobRepository;
 
-import javax.persistence.PostUpdate;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
