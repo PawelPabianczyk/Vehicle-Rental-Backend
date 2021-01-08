@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.dtos.JobHistoryRecordDto;
+import pl.vehiclerental.restapi.dtos.UserDto;
 import pl.vehiclerental.restapi.models.JobHistoryRecord;
 import pl.vehiclerental.restapi.models.Role;
 import pl.vehiclerental.restapi.models.User;
@@ -47,9 +48,8 @@ public class UserController {
     JobHistoryRecordRepository jobHistoryRecordRepository;
 
     @PostMapping("/logOut")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> logOut(@Valid @RequestBody JobHistoryRecordDto record) {
-
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
+    public ResponseEntity<?> logOut(@RequestBody JobHistoryRecordDto record) {
         User user = userRepository.findById(record.getUserId()).get();
         if (user.getEmployee() != null) {
             JobHistoryRecord jobHistoryRecord = new JobHistoryRecord();
@@ -141,8 +141,8 @@ public class UserController {
 
     @PostMapping("/deactivate")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deactivateUser(@RequestBody String id){
-        User user = userRepository.findById(Long.parseLong(id)).get();
+    public ResponseEntity<?> deactivateUser(@RequestBody UserDto userDto){
+        User user = userRepository.findById(userDto.getId()).get();
         user.setActive(false);
 
         if(user.getEmployee() != null){
@@ -161,8 +161,8 @@ public class UserController {
 
     @PostMapping("/activate")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> activateUser(@RequestBody String id){
-        User user = userRepository.findById(Long.parseLong(id)).get();
+    public ResponseEntity<?> activateUser(@RequestBody UserDto userDto){
+        User user = userRepository.findById(userDto.getId()).get();
         user.setActive(true);
 
         if(user.getEmployee() != null){
