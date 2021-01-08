@@ -1,6 +1,5 @@
 package pl.vehiclerental.restapi.dtos;
 
-import pl.vehiclerental.restapi.models.Role;
 import java.util.Set;
 
 public class UserDto {

@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +31,7 @@ import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.*;
 import pl.vehiclerental.restapi.security.jwt.JwtUtils;
 import pl.vehiclerental.restapi.security.services.UserDetailsImpl;
+import pl.vehiclerental.restapi.utilities.Converter;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -74,7 +78,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) throws JSONException {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -110,43 +114,14 @@ public class AuthController {
         pi.setUser(user);
 
         Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
-                        break;
-                    case "manager":
-                        Role modRole = roleRepository.findByName(ERole.ROLE_MANAGER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-
-                        break;
-
-                    case "employee":
-                        Role regularRole = roleRepository.findByName(ERole.ROLE_REGULAR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(regularRole);
-
-                        break;
-                    default:
-                        throw new RuntimeException("Error: Role is not found.");
-                }
-            });
-        }
-        user.setRoles(roles);
+        user.setRoles(Converter.stringsToRoles(roleRepository, strRoles));
 
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        JSONObject response = new JSONObject();
+        response.put("message", "User registered successfully!");
+        response.put("id", user.getId());
+
+        return ResponseEntity.ok(response.toString());
     }
 }

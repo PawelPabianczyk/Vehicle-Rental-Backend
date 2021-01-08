@@ -44,7 +44,7 @@ public class EmployeeController {
         Employee employee = new Employee(employeeDto.getBonus(),boss);
         User user = userRepository.findById(employeeDto.getUserId()).get();
         employee.setUser(user);
-        Job job = jobRepository.findById(employeeDto.getJobId()).get();
+        Job job = jobRepository.findByTitle(employeeDto.getJobTitle()).get();
         employee.setJob(job);
         employeeRepository.save(employee);
         return ResponseEntity.ok(new MessageResponse("Employee added successfully!"));
@@ -71,7 +71,7 @@ public class EmployeeController {
     private EmployeeDto convertToDto(Employee employee) {
         EmployeeDto employeeDto = new ModelMapper().map(employee, EmployeeDto.class);
         employeeDto.setUserId(employee.getUser().getId());
-        employeeDto.setJobId(employee.getJob().getId());
+        employeeDto.setJobTitle(employee.getJob().getTitle());
         Employee boss = employee.getBoss();
         if(boss != null){
             employeeDto.setBossId(boss.getId());

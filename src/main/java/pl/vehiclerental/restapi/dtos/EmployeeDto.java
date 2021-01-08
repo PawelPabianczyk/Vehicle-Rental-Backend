@@ -10,19 +10,19 @@ public class EmployeeDto {
 
     private Long userId;
 
-    private Long jobId;
+    private String jobTitle;
 
     private Boolean isActive;
 
     public EmployeeDto() {
     }
 
-    public EmployeeDto(Long id, double bonus, Long bossId, Long userId, Long jobId) {
+    public EmployeeDto(Long id, double bonus, Long bossId, Long userId, String jobTitle) {
         this.id = id;
         this.bonus = bonus;
         this.bossId = bossId;
         this.userId = userId;
-        this.jobId = jobId;
+        this.jobTitle = jobTitle;
     }
 
     public Long getId() {
@@ -57,12 +57,12 @@ public class EmployeeDto {
         this.userId = userId;
     }
 
-    public Long getJobId() {
-        return jobId;
+    public String getJobTitle() {
+        return jobTitle;
     }
 
-    public void setJobId(Long jobId) {
-        this.jobId = jobId;
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
     public Boolean getActive() {

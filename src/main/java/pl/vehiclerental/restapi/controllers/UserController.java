@@ -6,13 +6,17 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.models.Role;
 import pl.vehiclerental.restapi.models.User;
+import pl.vehiclerental.restapi.payload.request.UpdateUserRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.CustomerRepository;
 import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
+import pl.vehiclerental.restapi.repository.RoleRepository;
 import pl.vehiclerental.restapi.repository.UserRepository;
+import pl.vehiclerental.restapi.utilities.Converter;
 
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +35,12 @@ public class UserController {
 
     @Autowired
     PersonalInformationRepository personalInformationRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
@@ -107,5 +117,29 @@ public class UserController {
 
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User activated successfully!"));
+    }
+
+    @PostMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserRequest request){
+        User user = userRepository.findById(request.getId()).get();
+
+        if (request.getUsername() != null)
+            user.setUsername(request.getUsername());
+
+        if (request.getPassword() != null)
+            user.setPassword(encoder.encode(request.getPassword()));
+
+        if (request.getEmail() != null)
+            user.setEmail(request.getEmail());
+
+        if (request.getRoles() != null){
+            user.setRoles(Converter.stringsToRoles(roleRepository, request.getRoles()));
+        }
+
+        if(request.getFirstName() != null)
+            user.getPersonalInformation().setFirstName(request.getFirstName());
+
+        return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
     }
 }
