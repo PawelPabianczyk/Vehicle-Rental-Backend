@@ -18,7 +18,6 @@ import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.*;
 import pl.vehiclerental.restapi.utilities.Converter;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -69,7 +68,6 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllUsers() throws JSONException {
         List<User> users = userRepository.findAll();
-
         JSONArray jUsers = new JSONArray();
         JSONObject jUser;
         for (User u :
