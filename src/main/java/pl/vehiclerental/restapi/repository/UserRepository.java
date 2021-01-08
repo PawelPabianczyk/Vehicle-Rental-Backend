@@ -21,5 +21,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByIsActive(Boolean isActive);
 
     Optional<User> findByEmployee(Employee employee);
-
 }
