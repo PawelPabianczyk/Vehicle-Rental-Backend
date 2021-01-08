@@ -1,7 +1,6 @@
 package pl.vehiclerental.restapi.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
@@ -35,7 +34,7 @@ public class PersonalInformation {
     @Size(max = 50)
     private String phone;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne()
     @JoinColumn(name = "user_id")
     private User user;
 

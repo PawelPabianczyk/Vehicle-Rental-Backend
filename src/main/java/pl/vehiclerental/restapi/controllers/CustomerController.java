@@ -66,7 +66,7 @@ public class CustomerController {
 
     @PostMapping("/activate")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> activateEmployee(@RequestBody CustomerDto customerDto){
+    public ResponseEntity<?> activateCustomer(@RequestBody CustomerDto customerDto){
         Customer customer = customerRepository.findById(customerDto.getId()).get();
         customer.setActive(true);
 

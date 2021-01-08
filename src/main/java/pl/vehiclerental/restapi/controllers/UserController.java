@@ -1,30 +1,33 @@
 package pl.vehiclerental.restapi.controllers;
 
-import org.modelmapper.ModelMapper;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import pl.vehiclerental.restapi.dtos.PersonalInformationDto;
-import pl.vehiclerental.restapi.dtos.UserDto;
+import org.springframework.web.bind.annotation.*;
+import pl.vehiclerental.restapi.dtos.CustomerDto;
+import pl.vehiclerental.restapi.models.Customer;
 import pl.vehiclerental.restapi.models.PersonalInformation;
 import pl.vehiclerental.restapi.models.Role;
 import pl.vehiclerental.restapi.models.User;
-import pl.vehiclerental.restapi.payload.response.AllUserData;
+import pl.vehiclerental.restapi.payload.response.MessageResponse;
+import pl.vehiclerental.restapi.repository.CustomerRepository;
 import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
 import pl.vehiclerental.restapi.repository.UserRepository;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -34,53 +37,78 @@ public class UserController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<AllUserData> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() throws JSONException {
         List<User> users = userRepository.findAll();
-        return users.stream()
-                        .map(this::convertToAllUserData)
-                        .collect(Collectors.toList());
-    }
 
-    private AllUserData convertToAllUserData(User user) {
-        UserDto userDto = convertToDto(user);
-        PersonalInformationDto personalInformationDto = convertToDto(personalInformationRepository.findById(userDto.getPersonalInformationId()).get());
-        return new AllUserData(userDto,personalInformationDto);
-    }
+        JSONArray jUsers = new JSONArray();
+        JSONObject jUser;
+        for (User u :
+                users) {
+            jUser = new JSONObject();
+            jUser.put("username", u.getUsername());
+            jUser.put("email", u.getEmail());
+            jUser.put("isActive", u.getActive());
+            jUser.put("isActive", u.getActive());
 
-    private UserDto convertToDto(User user) {
-        UserDto userDto = new ModelMapper().map(user, UserDto.class);
-        PersonalInformation pi = personalInformationRepository.findByUser(user).get();
-        userDto.setPersonalInformationId(pi.getId());
+            Set<String> roles = new HashSet<>();
 
-        Set<String> userDtoRoles = new HashSet<>();
+            for (Role role :
+                    u.getRoles()) {
+                roles.add(role.getName().name());
+            }
 
-        Set<Role> userRoles = user.getRoles();
+            jUser.put("roles", roles);
+            jUser.put("address", u.getPersonalInformation().getAddress());
+            jUser.put("birthdate", u.getPersonalInformation().getBirthdate());
+            jUser.put("city", u.getPersonalInformation().getCity());
+            jUser.put("country", u.getPersonalInformation().getCountry());
+            jUser.put("firstName", u.getPersonalInformation().getFirstName());
+            jUser.put("lastName", u.getPersonalInformation().getLastName());
+            jUser.put("phone", u.getPersonalInformation().getPhone());
 
-        for (Role r :
-                userRoles) {
-            userDtoRoles.add(r.getName().name());
+            jUsers.put(jUser);
         }
 
-        userDto.setRoles(userDtoRoles);
-
-        if (user.getCustomer() != null) {
-            userDto.setCustomerId(user.getCustomer().getId());
-        } else {
-            userDto.setCustomerId(null);
-        }
-
-        if (user.getEmployee() != null) {
-            userDto.setEmployeeId(user.getEmployee().getId());
-        } else {
-            userDto.setEmployeeId(null);
-        }
-
-        return userDto;
+        return ResponseEntity.ok(jUsers.toString());
     }
 
-    private PersonalInformationDto convertToDto(PersonalInformation personalInformation) {
-        PersonalInformationDto personalInformationDto = new ModelMapper().map(personalInformation, PersonalInformationDto.class);
-        personalInformationDto.setUserId(personalInformation.getUser().getId());
-        return personalInformationDto;
+    @PostMapping("/deactivate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deactivateUser(@RequestBody Long id){
+        User user = userRepository.findById(id).get();
+        user.setActive(false);
+
+        if(user.getEmployee() != null){
+            user.getEmployee().setActive(false);
+        }
+
+        if(user.getCustomer() != null){
+            user.getCustomer().setActive(false);
+        }
+
+        user.getPersonalInformation().setActive(false);
+
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse("User deactivated successfully!"));
+    }
+
+    @PostMapping("/activate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> activateUser(@RequestBody Long id){
+        User user = userRepository.findById(id).get();
+        user.setActive(true);
+
+        if(user.getEmployee() != null){
+            user.getEmployee().setActive(true);
+        }
+
+        if(user.getCustomer() != null){
+            user.getCustomer().setActive(true);
+        }
+
+        user.getPersonalInformation().setActive(true);
+
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse("User activated successfully!"));
     }
 }
