@@ -16,6 +16,7 @@ import pl.vehiclerental.restapi.models.User;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.JobRepository;
 
+import javax.persistence.PostUpdate;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -73,5 +74,20 @@ public class JobController {
         job.setActive(false);
         jobRepository.save(job);
         return ResponseEntity.ok(new MessageResponse("Job deactivated successfully!"));
+    }
+
+    @PostMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateJob(@RequestBody JobDto jobDto){
+        Job job = jobRepository.findById(jobDto.getId()).get();
+
+        if(jobDto.getSalary() != null)
+            job.setSalary(jobDto.getSalary());
+
+        if(jobDto.getTitle() != null)
+            job.setTitle(jobDto.getTitle());
+
+        jobRepository.save(job);
+        return ResponseEntity.ok(new MessageResponse("Job updated successfully!"));
     }
 }
