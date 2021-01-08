@@ -140,6 +140,26 @@ public class UserController {
         if(request.getFirstName() != null)
             user.getPersonalInformation().setFirstName(request.getFirstName());
 
+        if(request.getLastName() != null)
+            user.getPersonalInformation().setLastName(request.getLastName());
+
+        if (request.getBirthdate() != null)
+            user.getPersonalInformation().setBirthdate(request.getBirthdate());
+
+        if (request.getCity() != null)
+            user.getPersonalInformation().setCity(request.getCity());
+
+        if (request.getCountry() != null)
+            user.getPersonalInformation().setCountry(request.getCountry());
+
+        if (request.getAddress() != null)
+            user.getPersonalInformation().setAddress(request.getAddress());
+
+        if (request.getPhone() != null)
+            user.getPersonalInformation().setPhone(request.getPhone());
+
+        userRepository.save(user);
+
         return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
     }
 }
