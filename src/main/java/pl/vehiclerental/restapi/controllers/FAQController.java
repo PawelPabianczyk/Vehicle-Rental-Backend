@@ -35,7 +35,6 @@ public class FAQController {
 
     private FAQDto convertToDto(FAQ faq){
         FAQDto faqDto = new ModelMapper().map(faq, FAQDto.class);
-        //TODO usunac potem
         if(faq.getEmployee() == null){
             faqDto.setEmployeeId(null);
         }
