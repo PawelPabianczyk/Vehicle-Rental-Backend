@@ -13,6 +13,8 @@ public class Job {
 
     private Double salary;
 
+    private Boolean isActive;
+
     public Long getId() {
         return id;
     }
@@ -35,5 +37,13 @@ public class Job {
 
     public void setSalary(Double salary) {
         this.salary = salary;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }
