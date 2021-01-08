@@ -79,6 +79,43 @@ public class UserController {
         return ResponseEntity.ok(jUsers.toString());
     }
 
+    @GetMapping("/active")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllActiveUsers() throws JSONException {
+        List<User> users = userRepository.findAllByIsActive(true);
+
+        JSONArray jUsers = new JSONArray();
+        JSONObject jUser;
+        for (User u :
+                users) {
+            jUser = new JSONObject();
+            jUser.put("id", u.getId());
+            jUser.put("username", u.getUsername());
+            jUser.put("email", u.getEmail());
+            jUser.put("isActive", u.getActive());
+
+            Set<String> roles = new HashSet<>();
+
+            for (Role role :
+                    u.getRoles()) {
+                roles.add(role.getName().name());
+            }
+
+            jUser.put("roles", roles);
+            jUser.put("address", u.getPersonalInformation().getAddress());
+            jUser.put("birthdate", u.getPersonalInformation().getBirthdate());
+            jUser.put("city", u.getPersonalInformation().getCity());
+            jUser.put("country", u.getPersonalInformation().getCountry());
+            jUser.put("firstName", u.getPersonalInformation().getFirstName());
+            jUser.put("lastName", u.getPersonalInformation().getLastName());
+            jUser.put("phone", u.getPersonalInformation().getPhone());
+
+            jUsers.put(jUser);
+        }
+
+        return ResponseEntity.ok(jUsers.toString());
+    }
+
     @PostMapping("/deactivate")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deactivateUser(@RequestBody Long id){
