@@ -1,5 +1,8 @@
 package pl.vehiclerental.restapi.controllers;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,14 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.dtos.CustomerDto;
 import pl.vehiclerental.restapi.models.Customer;
 import pl.vehiclerental.restapi.models.PersonalInformation;
+import pl.vehiclerental.restapi.models.Role;
 import pl.vehiclerental.restapi.models.User;
-import pl.vehiclerental.restapi.payload.request.UpdateUserRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.CustomerRepository;
 import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
 import pl.vehiclerental.restapi.repository.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -53,20 +58,46 @@ public class CustomerController {
 
     @GetMapping("/unverified")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
-    public List<CustomerDto> getAllUnverifiedCustomers() {
-        List<Customer> customers = (List<Customer>) customerRepository.findAllByIsVerified(false);
-        return customers.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<?> getAllUnverifiedCustomers() throws JSONException {
+        List<Customer> customers = customerRepository.findAllByIsVerified(false);
+
+        JSONArray jCustomers = new JSONArray();
+        JSONObject jCustomer;
+        for (Customer c :
+                customers) {
+            jCustomer = new JSONObject();
+            jCustomer.put("id", c.getId());
+            jCustomer.put("licenseNumber", c.getDrivingLicenseNumber());
+            jCustomer.put("firstName", c.getUser().getPersonalInformation().getFirstName());
+            jCustomer.put("lastName", c.getUser().getPersonalInformation().getLastName());
+            jCustomer.put("address", c.getUser().getPersonalInformation().getAddress());
+            jCustomer.put("city", c.getUser().getPersonalInformation().getCity());
+            jCustomer.put("country", c.getUser().getPersonalInformation().getCountry());
+            jCustomers.put(jCustomer);
+        }
+        return ResponseEntity.ok(jCustomers.toString());
     }
 
     @GetMapping("/verified")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
-    public List<CustomerDto> getAllVerifiedCustomers() {
-        List<Customer> customers = (List<Customer>) customerRepository.findAllByIsVerified(true);
-        return customers.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<?> getAllVerifiedCustomers() throws JSONException {
+        List<Customer> customers = customerRepository.findAllByIsVerified(true);
+
+        JSONArray jCustomers = new JSONArray();
+        JSONObject jCustomer;
+        for (Customer c :
+                customers) {
+            jCustomer = new JSONObject();
+            jCustomer.put("id", c.getId());
+            jCustomer.put("licenseNumber", c.getDrivingLicenseNumber());
+            jCustomer.put("firstName", c.getUser().getPersonalInformation().getFirstName());
+            jCustomer.put("lastName", c.getUser().getPersonalInformation().getLastName());
+            jCustomer.put("address", c.getUser().getPersonalInformation().getAddress());
+            jCustomer.put("city", c.getUser().getPersonalInformation().getCity());
+            jCustomer.put("country", c.getUser().getPersonalInformation().getCountry());
+            jCustomers.put(jCustomer);
+        }
+        return ResponseEntity.ok(jCustomers.toString());
     }
 
     @PostMapping("/deactivate")
