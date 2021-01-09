@@ -14,5 +14,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     List<Customer> findAllByIsActive(Boolean isActive);
 
+    List<Customer> findAllByIsVerified(Boolean isVerified);
+
 
 }

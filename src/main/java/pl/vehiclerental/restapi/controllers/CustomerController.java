@@ -44,7 +44,29 @@ public class CustomerController {
     private CustomerDto convertToDto(Customer customer){
         CustomerDto customerDto = new ModelMapper().map(customer, CustomerDto.class);
         customerDto.setUserId(customer.getUser().getId());
+        if (customer.getVerified())
+            customerDto.setStatus("verified");
+        else
+            customerDto.setStatus("unverified");
         return customerDto;
+    }
+
+    @GetMapping("/unverified")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
+    public List<CustomerDto> getAllUnverifiedCustomers() {
+        List<Customer> customers = (List<Customer>) customerRepository.findAllByIsVerified(false);
+        return customers.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/verified")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
+    public List<CustomerDto> getAllVerifiedCustomers() {
+        List<Customer> customers = (List<Customer>) customerRepository.findAllByIsVerified(true);
+        return customers.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/deactivate")
@@ -92,15 +114,32 @@ public class CustomerController {
 
         if(customerDto.getDrivingLicenseNumber() != null){
             customer.setDrivingLicenseNumber(customerDto.getDrivingLicenseNumber());
-            customer.setVerificationStatus("unverified");
+            customer.setVerified(false);
         }
 
-        if(customerDto.getVerificationStatus() != null){
-            customer.setVerificationStatus(customerDto.getVerificationStatus());
+        if(customerDto.getStatus() != null){
+            if(customerDto.getStatus().equals("verified")){
+                customer.setVerified(true);
+            }
+            else
+                customer.setVerified(false);
         }
+        customerRepository.save(customer);
+        return ResponseEntity.ok("Customer updated successfully");
+    }
+
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
+    public ResponseEntity<?> addCustomer(@RequestBody CustomerDto customerDto){
+        User user = userRepository.findById(customerDto.getUserId()).get();
+
+        Customer customer = new Customer();
+        customer.setDrivingLicenseNumber(customerDto.getDrivingLicenseNumber());
+        customer.setVerified(false);
+        customer.setUser(user);
+        customer.setActive(true);
 
         customerRepository.save(customer);
-
-        return ResponseEntity.ok("Customer updated successfully");
+        return ResponseEntity.ok("Customer added successfully");
     }
 }

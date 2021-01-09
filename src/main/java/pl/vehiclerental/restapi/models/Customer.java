@@ -14,8 +14,7 @@ public class Customer {
     @Size(max = 50)
     private String drivingLicenseNumber;
 
-    @Column(length = 20)
-    private String verificationStatus;
+    private Boolean isVerified;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -43,12 +42,12 @@ public class Customer {
         this.drivingLicenseNumber = drivingLicenseNumber;
     }
 
-    public String getVerificationStatus() {
-        return verificationStatus;
+    public Boolean getVerified() {
+        return isVerified;
     }
 
-    public void setVerificationStatus(String verificationStatus) {
-        this.verificationStatus = verificationStatus;
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
     }
 
     public User getUser() {

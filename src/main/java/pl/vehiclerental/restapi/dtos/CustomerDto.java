@@ -6,7 +6,7 @@ public class CustomerDto {
 
     private String drivingLicenseNumber;
 
-    private String verificationStatus;
+    private String status;
 
     private Long userId;
 
@@ -28,12 +28,12 @@ public class CustomerDto {
         this.drivingLicenseNumber = drivingLicenseNumber;
     }
 
-    public String getVerificationStatus() {
-        return verificationStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setVerificationStatus(String verificationStatus) {
-        this.verificationStatus = verificationStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getUserId() {
