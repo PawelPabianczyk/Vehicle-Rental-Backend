@@ -11,6 +11,8 @@ public class JwtResponse {
     private String token;
     private String type = "Bearer";
     private Long id;
+    private Long idEmployee;
+    private Long idCustomer;
     private String username;
     private String email;
     private PersonalInformation personalInformation;
@@ -123,5 +125,21 @@ public class JwtResponse {
 
     public List<String> getRoles() {
         return roles;
+    }
+
+    public Long getIdEmployee() {
+        return idEmployee;
+    }
+
+    public void setIdEmployee(Long idEmployee) {
+        this.idEmployee = idEmployee;
+    }
+
+    public Long getIdCustomer() {
+        return idCustomer;
+    }
+
+    public void setIdCustomer(Long idCustomer) {
+        this.idCustomer = idCustomer;
     }
 }
