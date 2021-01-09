@@ -9,6 +9,7 @@ import pl.vehiclerental.restapi.dtos.CustomerDto;
 import pl.vehiclerental.restapi.models.Customer;
 import pl.vehiclerental.restapi.models.PersonalInformation;
 import pl.vehiclerental.restapi.models.User;
+import pl.vehiclerental.restapi.payload.request.UpdateUserRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.CustomerRepository;
 import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
@@ -80,5 +81,26 @@ public class CustomerController {
         personalInformationRepository.save(personalInformation);
         customerRepository.save(customer);
         return ResponseEntity.ok(new MessageResponse("Customer activated successfully!"));
+    }
+
+    @PostMapping("/update")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
+    public ResponseEntity<?> updateCustomer(@RequestBody CustomerDto customerDto){
+        User user = userRepository.findById(customerDto.getUserId()).get();
+
+        Customer customer = customerRepository.findByUser(user).get();
+
+        if(customerDto.getDrivingLicenseNumber() != null){
+            customer.setDrivingLicenseNumber(customerDto.getDrivingLicenseNumber());
+            customer.setVerificationStatus("unverified");
+        }
+
+        if(customerDto.getVerificationStatus() != null){
+            customer.setVerificationStatus(customerDto.getVerificationStatus());
+        }
+
+        customerRepository.save(customer);
+
+        return ResponseEntity.ok("Customer updated successfully");
     }
 }
