@@ -2,15 +2,13 @@ package pl.vehiclerental.restapi.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import pl.vehiclerental.restapi.dtos.EmployeeDto;
+import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.dtos.FAQDto;
-import pl.vehiclerental.restapi.models.Employee;
-import pl.vehiclerental.restapi.models.FAQ;
+import pl.vehiclerental.restapi.models.*;
+import pl.vehiclerental.restapi.payload.response.MessageResponse;
+import pl.vehiclerental.restapi.repository.EmployeeRepository;
 import pl.vehiclerental.restapi.repository.FAQRepository;
 
 import java.util.List;
@@ -24,8 +22,10 @@ public class FAQController {
     @Autowired
     FAQRepository faqRepository;
 
+    @Autowired
+    EmployeeRepository employeeRepository;
+
     @GetMapping("/all")
-    @PreAuthorize("hasRole('REGULAR')")
     public List<FAQDto> getAllFAQ() {
         List<FAQ> employees = faqRepository.findAll();
         return employees.stream()
@@ -42,5 +42,47 @@ public class FAQController {
             faqDto.setEmployeeId(faq.getEmployee().getId());
         }
         return faqDto;
+    }
+
+    @PostMapping("/deactivate")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> deactivateFAQ(@RequestBody FAQDto faqDto){
+        FAQ faq = faqRepository.findById(faqDto.getId()).get();
+        faq.setActive(false);
+        faqRepository.save(faq);
+        return ResponseEntity.ok(new MessageResponse("FAQ deactivated successfully!"));
+    }
+
+    @PostMapping("/activate")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> activateFAQ(@RequestBody FAQDto faqDto){
+        FAQ faq = faqRepository.findById(faqDto.getId()).get();
+        faq.setActive(true);
+        faqRepository.save(faq);
+        return ResponseEntity.ok(new MessageResponse("FAQ activated successfully!"));
+    }
+
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> addFAQ(@RequestBody FAQDto faqDto){
+        Employee employee = employeeRepository.findById(faqDto.getEmployeeId()).get();
+        FAQ faq = new FAQ();
+        faq.setActive(true);
+        faq.setEmployee(employee);
+        faq.setAnswer(faqDto.getAnswer());
+        faq.setQuestion(faqDto.getQuestion());
+        faqRepository.save(faq);
+        return ResponseEntity.ok(new MessageResponse("FAQ added successfully!"));
+    }
+
+    @PostMapping("/update")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> updateFAQ(@RequestBody FAQDto faqDto){
+        FAQ faq = faqRepository.findById(faqDto.getId()).get();
+        faq.setActive(true);
+        faq.setAnswer(faqDto.getAnswer());
+        faq.setQuestion(faqDto.getQuestion());
+        faqRepository.save(faq);
+        return ResponseEntity.ok(new MessageResponse("FAQ updated successfully!"));
     }
 }

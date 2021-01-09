@@ -9,6 +9,8 @@ public class FAQDto {
 
     private Long employeeId;
 
+    private Boolean isActive;
+
     public Long getId() {
         return id;
     }
@@ -39,5 +41,13 @@ public class FAQDto {
 
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

@@ -18,6 +18,8 @@ public class FAQ {
     @JoinColumn(name="employee_id")
     private Employee employee;
 
+    private Boolean isActive;
+
     public Long getId() {
         return id;
     }
@@ -48,5 +50,13 @@ public class FAQ {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }
