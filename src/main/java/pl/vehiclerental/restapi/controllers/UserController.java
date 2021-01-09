@@ -18,7 +18,9 @@ import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.*;
 import pl.vehiclerental.restapi.utilities.Converter;
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,16 +51,19 @@ public class UserController {
     @PostMapping("/logOut")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
     public ResponseEntity<?> logOut(@RequestBody JobHistoryRecordDto record) {
+
+        System.out.println("Start: "+record.getStartDate());
+        System.out.println("End: "+Date.valueOf(LocalDate.now()));
+
         User user = userRepository.findById(record.getUserId()).get();
         if (user.getEmployee() != null) {
             JobHistoryRecord jobHistoryRecord = new JobHistoryRecord();
             jobHistoryRecord.setStartDate(record.getStartDate());
-            jobHistoryRecord.setEndDate(LocalDate.now());
+            jobHistoryRecord.setEndDate(LocalDateTime.now());
             jobHistoryRecord.setEmployee(user.getEmployee());
             jobHistoryRecordRepository.save(jobHistoryRecord);
             return ResponseEntity.ok(new MessageResponse("Job history record added successfully!"));
         }
-
 
         System.out.println(jobHistoryRecordRepository.findById(1L).get().getEndDate());
         return ResponseEntity.ok(new MessageResponse("User logged out successfully!"));

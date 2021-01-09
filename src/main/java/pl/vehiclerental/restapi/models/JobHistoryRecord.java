@@ -1,7 +1,8 @@
 package pl.vehiclerental.restapi.models;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(	name = "job_history")
@@ -11,9 +12,10 @@ public class JobHistoryRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate startDate;
 
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="employee_id")
@@ -27,19 +29,19 @@ public class JobHistoryRecord {
         this.id = id;
     }
 
-    public LocalDate getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 

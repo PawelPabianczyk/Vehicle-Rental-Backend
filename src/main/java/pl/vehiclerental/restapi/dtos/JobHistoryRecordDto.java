@@ -1,17 +1,17 @@
 package pl.vehiclerental.restapi.dtos;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class JobHistoryRecordDto {
 
-    private LocalDate startDate;
+    private LocalDateTime startDate;
     private Long userId;
 
-    public LocalDate getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
