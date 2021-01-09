@@ -183,7 +183,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
     public ResponseEntity<?> updateUser(@RequestBody UpdateUserRequest request){
         User user = userRepository.findById(request.getId()).get();
 
