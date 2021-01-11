@@ -208,7 +208,7 @@ public class UserController {
             user.getPersonalInformation().setLastName(request.getLastName());
 
         if (request.getBirthdate() != null)
-            user.getPersonalInformation().setBirthdate(request.getBirthdate());
+            user.getPersonalInformation().setBirthdate(request.getBirthdate().plusDays(1));
 
         if (request.getCity() != null)
             user.getPersonalInformation().setCity(request.getCity());
