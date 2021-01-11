@@ -1,15 +1,15 @@
 package pl.vehiclerental.restapi.controllers;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.dtos.EmployeeDto;
-import pl.vehiclerental.restapi.models.Employee;
-import pl.vehiclerental.restapi.models.Job;
-import pl.vehiclerental.restapi.models.PersonalInformation;
-import pl.vehiclerental.restapi.models.User;
+import pl.vehiclerental.restapi.models.*;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.EmployeeRepository;
 import pl.vehiclerental.restapi.repository.JobRepository;
@@ -17,7 +17,9 @@ import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
 import pl.vehiclerental.restapi.repository.UserRepository;
 
 import javax.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -51,35 +53,89 @@ public class EmployeeController {
     }
 
     @GetMapping("/active")
-    @PreAuthorize("hasRole('MANAGER')")
-    public List<EmployeeDto> getActiveEmployees() {
-        List<Employee> employees = employeeRepository.findAllByIsActive(true);
-        return employees.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<EmployeeDto> getAllEmployees() {
-        List<Employee> employees = employeeRepository.findAll();
-        return employees.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<?> getActiveEmployees() throws JSONException {
+        List<Employee> employees = employeeRepository.findAllByIsActive(true);
+        JSONArray jEmployees = new JSONArray();
+        JSONObject jEmployee;
+
+        for (Employee e :
+                employees) {
+            jEmployee = new JSONObject();
+            jEmployee.put("employeeId", e.getId());
+            jEmployee.put("bonus", e.getBonus());
+
+            if(e.getBoss() != null){
+                Employee boss = employeeRepository.findById(e.getBoss().getId()).get();
+                jEmployee.put("bossUsername", boss.getUser().getUsername());
+            }
+            else{
+                jEmployee.put("bossUsername", null);
+            }
+
+            jEmployee.put("userId", e.getUser().getId());
+            jEmployee.put("jobTitle", e.getJob().getTitle());
+
+            jEmployee.put("username", e.getUser().getUsername());
+            jEmployee.put("email", e.getUser().getEmail());
+            jEmployee.put("firstName", e.getUser().getPersonalInformation().getFirstName());
+            jEmployee.put("lastName", e.getUser().getPersonalInformation().getLastName());
+
+            Set<String> roles = new HashSet<>();
+
+            for (Role role :
+                    e.getUser().getRoles()) {
+                roles.add(role.getName().name());
+            }
+            jEmployee.put("roles", roles);
+
+            jEmployees.put(jEmployee);
+        }
+
+        return ResponseEntity.ok(jEmployees.toString());
     }
 
-    private EmployeeDto convertToDto(Employee employee) {
-        EmployeeDto employeeDto = new ModelMapper().map(employee, EmployeeDto.class);
-        employeeDto.setUserId(employee.getUser().getId());
-        employeeDto.setJobTitle(employee.getJob().getTitle());
-        Employee boss = employee.getBoss();
-        if(boss != null){
-            employeeDto.setBossId(boss.getId());
+    @GetMapping("/inactive")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getInactiveEmployees() throws JSONException {
+        List<Employee> employees = employeeRepository.findAllByIsActive(false);
+        JSONArray jEmployees = new JSONArray();
+        JSONObject jEmployee;
+
+        for (Employee e :
+                employees) {
+            jEmployee = new JSONObject();
+            jEmployee.put("employeeId", e.getId());
+            jEmployee.put("bonus", e.getBonus());
+
+            if(e.getBoss() != null){
+                Employee boss = employeeRepository.findById(e.getBoss().getId()).get();
+                jEmployee.put("bossUsername", boss.getUser().getUsername());
+            }
+            else{
+                jEmployee.put("bossUsername", null);
+            }
+
+            jEmployee.put("userId", e.getUser().getId());
+            jEmployee.put("jobTitle", e.getJob().getTitle());
+
+            jEmployee.put("username", e.getUser().getUsername());
+            jEmployee.put("email", e.getUser().getEmail());
+            jEmployee.put("firstName", e.getUser().getPersonalInformation().getFirstName());
+            jEmployee.put("lastName", e.getUser().getPersonalInformation().getLastName());
+
+            Set<String> roles = new HashSet<>();
+
+            for (Role role :
+                    e.getUser().getRoles()) {
+                roles.add(role.getName().name());
+            }
+            jEmployee.put("roles", roles);
+
+            jEmployees.put(jEmployee);
         }
-        else{
-            employeeDto.setBossId(null);
-        }
-        return employeeDto;
+
+        return ResponseEntity.ok(jEmployees.toString());
     }
 
     @PostMapping("/deactivate")
@@ -116,5 +172,19 @@ public class EmployeeController {
         personalInformationRepository.save(personalInformation);
         employeeRepository.save(employee);
         return ResponseEntity.ok(new MessageResponse("Employee activated successfully!"));
+    }
+
+    private EmployeeDto convertToDto(Employee employee) {
+        EmployeeDto employeeDto = new ModelMapper().map(employee, EmployeeDto.class);
+        employeeDto.setUserId(employee.getUser().getId());
+        employeeDto.setJobTitle(employee.getJob().getTitle());
+        Employee boss = employee.getBoss();
+        if(boss != null){
+            employeeDto.setBossId(boss.getId());
+        }
+        else{
+            employeeDto.setBossId(null);
+        }
+        return employeeDto;
     }
 }
