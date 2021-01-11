@@ -10,11 +10,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.dtos.EmployeeDto;
 import pl.vehiclerental.restapi.models.*;
+import pl.vehiclerental.restapi.payload.request.UpdateEmployeeRequest;
+import pl.vehiclerental.restapi.payload.request.UpdateUserRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
-import pl.vehiclerental.restapi.repository.EmployeeRepository;
-import pl.vehiclerental.restapi.repository.JobRepository;
-import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
-import pl.vehiclerental.restapi.repository.UserRepository;
+import pl.vehiclerental.restapi.repository.*;
+import pl.vehiclerental.restapi.utilities.Converter;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -38,6 +38,9 @@ public class EmployeeController {
 
     @Autowired
     JobRepository jobRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
@@ -186,5 +189,37 @@ public class EmployeeController {
             employeeDto.setBossId(null);
         }
         return employeeDto;
+    }
+
+    @PostMapping("/update")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<?> updateEmployee(@RequestBody UpdateEmployeeRequest request){
+        User user = userRepository.findById(request.getUserId()).get();
+
+        if (request.getUsername() != null)
+            user.setUsername(request.getUsername());
+
+        if (request.getEmail() != null)
+            user.setEmail(request.getEmail());
+
+        if(request.getFirstName() != null)
+            user.getPersonalInformation().setFirstName(request.getFirstName());
+
+        if(request.getLastName() != null)
+            user.getPersonalInformation().setLastName(request.getLastName());
+
+        if (request.getJobTitle() != null)
+            user.getEmployee().getJob().setTitle(request.getJobTitle());
+
+        if (request.getRoles() != null){
+            user.setRoles(Converter.stringsToRoles(roleRepository, request.getRoles()));
+        }
+
+        if (request.getBonus() != null)
+            user.getEmployee().setBonus(request.getBonus());
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("Employee updated successfully!"));
     }
 }
