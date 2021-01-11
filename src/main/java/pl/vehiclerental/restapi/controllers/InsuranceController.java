@@ -1,5 +1,9 @@
 package pl.vehiclerental.restapi.controllers;
 
+import netscape.javascript.JSObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,5 +50,30 @@ public class InsuranceController {
         insuranceRepository.save(insurance);
 
         return ResponseEntity.ok("Insurance added successfully");
+    }
+
+    @GetMapping("/active")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> getAllActiveInsurances() throws JSONException {
+        List<Insurance> insurances = insuranceRepository.findByIsActiveOrderByExpirationDateAsc(true);
+
+        JSONArray jInsurances = new JSONArray();
+        JSONObject jInsurance;
+
+        for (Insurance i :
+                insurances) {
+            jInsurance = new JSONObject();
+            jInsurance.put("id", i.getId());
+            jInsurance.put("dateOfPurchase", i.getDateOfPurchase());
+            jInsurance.put("expirationDate", i.getExpirationDate());
+            jInsurance.put("price", i.getPrice());
+            jInsurance.put("brand", i.getVehicle().getBrand());
+            jInsurance.put("model", i.getVehicle().getModel());
+            jInsurance.put("yearOfProduction", i.getVehicle().getYearOfProduction());
+            jInsurance.put("country", i.getVehicle().getCountry());
+            jInsurances.put(jInsurance);
+        }
+
+        return ResponseEntity.ok(jInsurances.toString());
     }
 }

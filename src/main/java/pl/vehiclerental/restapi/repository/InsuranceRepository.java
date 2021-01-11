@@ -11,4 +11,6 @@ import java.util.List;
 public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
     List<Insurance> findAllByVehicle(Vehicle vehicle);
 
+    List<Insurance> findByIsActiveOrderByExpirationDateAsc(Boolean isActive);
+
 }
