@@ -208,8 +208,10 @@ public class EmployeeController {
         if(request.getLastName() != null)
             user.getPersonalInformation().setLastName(request.getLastName());
 
-        if (request.getJobTitle() != null)
-            user.getEmployee().getJob().setTitle(request.getJobTitle());
+        if (request.getJobTitle() != null){
+            Job job = jobRepository.findByTitle(request.getJobTitle()).get();
+            user.getEmployee().setJob(job);
+        }
 
         if (request.getRoles() != null){
             user.setRoles(Converter.stringsToRoles(roleRepository, request.getRoles()));
