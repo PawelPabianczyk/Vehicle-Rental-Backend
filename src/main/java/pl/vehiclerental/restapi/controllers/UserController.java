@@ -22,6 +22,8 @@ import javax.validation.Valid;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +61,10 @@ public class UserController {
         User user = userRepository.findById(record.getUserId()).get();
         if (user.getEmployee() != null) {
             JobHistoryRecord jobHistoryRecord = new JobHistoryRecord();
-            jobHistoryRecord.setStartDate(record.getStartDate());
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
+            jobHistoryRecord.setStartDate(LocalDateTime.parse(record.getStartDate(), formatter));
+
             jobHistoryRecord.setEndDate(LocalDateTime.now());
             jobHistoryRecord.setEmployee(user.getEmployee());
             jobHistoryRecordRepository.save(jobHistoryRecord);
