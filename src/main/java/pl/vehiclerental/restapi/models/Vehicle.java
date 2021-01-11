@@ -20,7 +20,7 @@ public class Vehicle {
     @Size(max = 50)
     private String model;
 
-    private int yearOfProduction;
+    private Integer yearOfProduction;
 
     @Size(max = 50)
     private String country;
@@ -29,6 +29,7 @@ public class Vehicle {
 
     private Double price;
 
+    @Size(max = 5000)
     private String description;
 
     @Size(max = 2083)
@@ -44,7 +45,7 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    public Vehicle(String brand, String model, int yearOfProduction,
+    public Vehicle(String brand, String model, Integer yearOfProduction,
                    String country, Double power, Double price, String description, String pictureUrl) {
         this.brand = brand;
         this.model = model;
@@ -81,11 +82,11 @@ public class Vehicle {
         this.model = model;
     }
 
-    public int getYearOfProduction() {
+    public Integer getYearOfProduction() {
         return yearOfProduction;
     }
 
-    public void setYearOfProduction(int yearOfProduction) {
+    public void setYearOfProduction(Integer yearOfProduction) {
         this.yearOfProduction = yearOfProduction;
     }
 

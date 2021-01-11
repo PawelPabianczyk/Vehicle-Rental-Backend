@@ -15,6 +15,7 @@ import pl.vehiclerental.restapi.repository.CategoryRepository;
 import pl.vehiclerental.restapi.repository.InspectionRepository;
 import pl.vehiclerental.restapi.repository.InsuranceRepository;
 import pl.vehiclerental.restapi.repository.VehicleRepository;
+import pl.vehiclerental.restapi.utilities.Converter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public class VehicleController {
                 .collect(Collectors.toList());
     }
 
-    private VehicleDto convertToDto(Vehicle vehicle){
+    private VehicleDto convertToDto(Vehicle vehicle) {
         VehicleDto vehicleDto = new ModelMapper().map(vehicle, VehicleDto.class);
         vehicleDto.setCategory(vehicle.getCategory().getName().name());
         return vehicleDto;
@@ -77,42 +78,7 @@ public class VehicleController {
         );
 
         String strCategory = vehicleDto.getCategory();
-
-        switch (strCategory) {
-            case "SEDAN":
-                Category sedanCategory = categoryRepository.findByName(ECategory.SEDAN)
-                        .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
-                vehicle.setCategory(sedanCategory);
-
-                break;
-            case "COUPE":
-                Category coupeCategory = categoryRepository.findByName(ECategory.COUPE)
-                        .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
-                vehicle.setCategory(coupeCategory);
-
-                break;
-
-            case "SPORTS":
-                Category sportsCategory = categoryRepository.findByName(ECategory.SPORTS)
-                        .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
-                vehicle.setCategory(sportsCategory);
-
-                break;
-            case "HATCHBACK":
-                Category hatchbackCategory = categoryRepository.findByName(ECategory.HATCHBACK)
-                        .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
-                vehicle.setCategory(hatchbackCategory);
-
-                break;
-            case "SUV":
-                Category suvCategory = categoryRepository.findByName(ECategory.SUV)
-                        .orElseThrow(() -> new RuntimeException("Error: Category is not found."));
-                vehicle.setCategory(suvCategory);
-
-                break;
-            default:
-                throw new RuntimeException("Error: Category is not found.");
-        }
+        vehicle.setCategory(Converter.stringsToCategory(categoryRepository, strCategory));
 
         InsuranceDto insuranceDto = addVehicleRequest.getInsuranceDto();
 
@@ -136,5 +102,42 @@ public class VehicleController {
 
         vehicleRepository.save(vehicle);
         return ResponseEntity.ok(new MessageResponse("Vehicle added successfully!"));
+    }
+
+    @PostMapping("/update")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> updateVehicle(@RequestBody VehicleDto vehicleDto) {
+        Vehicle vehicle = vehicleRepository.findById(vehicleDto.getId()).get();
+
+        if (vehicleDto.getBrand() != null)
+            vehicle.setBrand(vehicleDto.getBrand());
+
+        if (vehicleDto.getModel() != null)
+            vehicle.setModel(vehicleDto.getModel());
+
+        if (vehicleDto.getYearOfProduction() != null)
+            vehicle.setYearOfProduction(vehicleDto.getYearOfProduction());
+
+        if (vehicleDto.getCountry() != null)
+            vehicle.setCountry(vehicleDto.getCountry());
+
+        if (vehicleDto.getPower() != null)
+            vehicle.setPower(vehicleDto.getPower());
+
+        if (vehicleDto.getPrice() != null)
+            vehicle.setPrice(vehicleDto.getPrice());
+
+        if (vehicleDto.getDescription() != null)
+            vehicle.setDescription(vehicleDto.getDescription());
+
+        if (vehicleDto.getPictureUrl() != null)
+            vehicle.setPictureUrl(vehicleDto.getPictureUrl());
+
+        if (vehicleDto.getCategory() != null) {
+            vehicle.setCategory(Converter.stringsToCategory(categoryRepository, vehicleDto.getCategory()));
+        }
+
+        vehicleRepository.save(vehicle);
+        return ResponseEntity.ok("Vehicle updated successfully");
     }
 }

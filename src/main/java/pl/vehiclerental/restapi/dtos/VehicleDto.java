@@ -7,7 +7,7 @@ public class VehicleDto {
 
     private String model;
 
-    private int yearOfProduction;
+    private Integer yearOfProduction;
 
     private String country;
 
@@ -47,11 +47,11 @@ public class VehicleDto {
         this.model = model;
     }
 
-    public int getYearOfProduction() {
+    public Integer getYearOfProduction() {
         return yearOfProduction;
     }
 
-    public void setYearOfProduction(int yearOfProduction) {
+    public void setYearOfProduction(Integer yearOfProduction) {
         this.yearOfProduction = yearOfProduction;
     }
 
