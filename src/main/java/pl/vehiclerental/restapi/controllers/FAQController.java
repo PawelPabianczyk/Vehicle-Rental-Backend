@@ -33,6 +33,14 @@ public class FAQController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/active")
+    public List<FAQDto> getAllActiveFAQ() {
+        List<FAQ> employees = faqRepository.findAllByIsActive(true);
+        return employees.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     private FAQDto convertToDto(FAQ faq){
         FAQDto faqDto = new ModelMapper().map(faq, FAQDto.class);
         if(faq.getEmployee() == null){
