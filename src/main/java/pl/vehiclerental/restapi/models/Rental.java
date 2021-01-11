@@ -25,6 +25,9 @@ public class Rental {
             fetch = FetchType.LAZY)
     private Complaint complaint;
 
+    public Rental() {
+    }
+
     public Rental(LocalDate startDate, LocalDate endDate, double cost) {
         this.startDate = startDate;
         this.endDate = endDate;
