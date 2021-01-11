@@ -59,7 +59,7 @@ public class CustomerController {
     @GetMapping("/unverified")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
     public ResponseEntity<?> getAllUnverifiedCustomers() throws JSONException {
-        List<Customer> customers = customerRepository.findAllByIsVerified(false);
+        List<Customer> customers = customerRepository.findAllByIsVerifiedAndDrivingLicenseNumberIsNotNull(false);
 
         JSONArray jCustomers = new JSONArray();
         JSONObject jCustomer;
