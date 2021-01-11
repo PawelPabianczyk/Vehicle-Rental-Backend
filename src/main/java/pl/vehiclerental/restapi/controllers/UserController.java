@@ -18,6 +18,7 @@ import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.*;
 import pl.vehiclerental.restapi.utilities.Converter;
 
+import javax.validation.Valid;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -224,5 +225,14 @@ public class UserController {
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
+    }
+
+    @PostMapping("/password")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody UserDto userDto){
+        User user = userRepository.findById(userDto.getId()).get();
+        user.setPassword(encoder.encode(userDto.getPassword()));
+        userRepository.save(user);
+        return ResponseEntity.ok("Password changed successfully");
     }
 }
