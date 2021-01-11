@@ -67,7 +67,7 @@ public class CustomerController {
                 customers) {
             jCustomer = new JSONObject();
             jCustomer.put("id", c.getId());
-            jCustomer.put("licenseNumber", c.getDrivingLicenseNumber());
+            jCustomer.put("drivingLicenseNumber", c.getDrivingLicenseNumber());
             jCustomer.put("firstName", c.getUser().getPersonalInformation().getFirstName());
             jCustomer.put("lastName", c.getUser().getPersonalInformation().getLastName());
             jCustomer.put("address", c.getUser().getPersonalInformation().getAddress());
