@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.dtos.EmployeeDto;
 import pl.vehiclerental.restapi.models.*;
 import pl.vehiclerental.restapi.payload.request.UpdateEmployeeRequest;
-import pl.vehiclerental.restapi.payload.request.UpdateUserRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.*;
 import pl.vehiclerental.restapi.utilities.Converter;
@@ -20,7 +19,6 @@ import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -78,6 +76,7 @@ public class EmployeeController {
 
             jEmployee.put("userId", e.getUser().getId());
             jEmployee.put("jobTitle", e.getJob().getTitle());
+            jEmployee.put("salary", e.getJob().getSalary());
 
             jEmployee.put("username", e.getUser().getUsername());
             jEmployee.put("email", e.getUser().getEmail());
@@ -121,6 +120,7 @@ public class EmployeeController {
 
             jEmployee.put("userId", e.getUser().getId());
             jEmployee.put("jobTitle", e.getJob().getTitle());
+            jEmployee.put("salary", e.getJob().getSalary());
 
             jEmployee.put("username", e.getUser().getUsername());
             jEmployee.put("email", e.getUser().getEmail());
