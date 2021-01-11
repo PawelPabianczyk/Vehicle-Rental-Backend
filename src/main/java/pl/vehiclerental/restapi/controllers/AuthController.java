@@ -1,13 +1,5 @@
 package pl.vehiclerental.restapi.controllers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +9,26 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import pl.vehiclerental.restapi.models.*;
+import org.springframework.web.bind.annotation.*;
+import pl.vehiclerental.restapi.models.Customer;
+import pl.vehiclerental.restapi.models.PersonalInformation;
+import pl.vehiclerental.restapi.models.User;
 import pl.vehiclerental.restapi.payload.request.LoginRequest;
 import pl.vehiclerental.restapi.payload.request.SignupRequest;
 import pl.vehiclerental.restapi.payload.response.JwtResponse;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
-import pl.vehiclerental.restapi.repository.*;
+import pl.vehiclerental.restapi.repository.CustomerRepository;
+import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
+import pl.vehiclerental.restapi.repository.RoleRepository;
+import pl.vehiclerental.restapi.repository.UserRepository;
 import pl.vehiclerental.restapi.security.jwt.JwtUtils;
 import pl.vehiclerental.restapi.security.services.UserDetailsImpl;
 import pl.vehiclerental.restapi.utilities.Converter;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -91,7 +88,8 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) throws JSONException {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest)
+            throws JSONException {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
