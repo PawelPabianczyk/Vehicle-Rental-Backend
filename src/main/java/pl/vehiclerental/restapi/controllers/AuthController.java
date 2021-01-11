@@ -50,6 +50,9 @@ public class AuthController {
     PersonalInformationRepository personalInformationRepository;
 
     @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
     PasswordEncoder encoder;
 
     @Autowired
@@ -125,8 +128,17 @@ public class AuthController {
 
         Set<String> strRoles = signUpRequest.getRole();
         user.setRoles(Converter.stringsToRoles(roleRepository, strRoles));
-
         userRepository.save(user);
+
+        if(strRoles == null){
+            Customer customer = new Customer();
+            customer.setDrivingLicenseNumber(null);
+            customer.setVerified(false);
+            customer.setUser(user);
+            customer.setActive(true);
+
+            customerRepository.save(customer);
+        }
 
         JSONObject response = new JSONObject();
         response.put("message", "User registered successfully!");
