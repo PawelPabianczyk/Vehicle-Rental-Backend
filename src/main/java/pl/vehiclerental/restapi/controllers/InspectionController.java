@@ -26,7 +26,30 @@ public class InspectionController {
     @Autowired
     VehicleRepository vehicleRepository;
 
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> addInspection(@RequestBody InspectionDto inspectionDto){
+        Vehicle vehicle = vehicleRepository.findById(inspectionDto.getVehicleId()).get();
 
+        Inspection inspection = new Inspection();
+        inspection.setStartDate(inspectionDto.getStartDate());
+        inspection.setExpirationDate(inspectionDto.getExpirationDate());
+        inspection.setVehicle(vehicle);
+        inspection.setActive(true);
+        inspection.setPrice(inspectionDto.getPrice());
+
+        List<Inspection> inspections = inspectionRepository.findAllByVehicle(vehicle);
+
+        for (Inspection i :
+                inspections) {
+            i.setActive(false);
+            inspectionRepository.save(i);
+        }
+
+        inspectionRepository.save(inspection);
+
+        return ResponseEntity.ok("Inspection added successfully");
+    }
 
     @GetMapping("/active")
     @PreAuthorize("hasRole('REGULAR')")
