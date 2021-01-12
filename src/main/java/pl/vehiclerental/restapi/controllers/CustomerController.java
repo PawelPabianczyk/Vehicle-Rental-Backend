@@ -11,16 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.dtos.CustomerDto;
 import pl.vehiclerental.restapi.models.Customer;
 import pl.vehiclerental.restapi.models.PersonalInformation;
-import pl.vehiclerental.restapi.models.Role;
 import pl.vehiclerental.restapi.models.User;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.CustomerRepository;
 import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
 import pl.vehiclerental.restapi.repository.UserRepository;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -157,6 +154,15 @@ public class CustomerController {
         }
         customerRepository.save(customer);
         return ResponseEntity.ok("Customer updated successfully");
+    }
+
+    @PostMapping("/license")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
+    public ResponseEntity<?> getCustomerLicense(@RequestBody CustomerDto customerDto) throws JSONException {
+        Customer customer = customerRepository.findById(customerDto.getId()).get();
+        JSONObject jCustomer = new JSONObject();
+        jCustomer.put("idCustomer", customer.getDrivingLicenseNumber());
+        return ResponseEntity.ok(jCustomer.toString());
     }
 
     @PostMapping("/add")
