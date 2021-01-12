@@ -136,9 +136,7 @@ public class CustomerController {
     @PostMapping("/update")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
     public ResponseEntity<?> updateCustomer(@RequestBody CustomerDto customerDto){
-        User user = userRepository.findById(customerDto.getUserId()).get();
-
-        Customer customer = customerRepository.findByUser(user).get();
+        Customer customer = customerRepository.findById(customerDto.getId()).get();
 
         if(customerDto.getDrivingLicenseNumber() != null){
             customer.setDrivingLicenseNumber(customerDto.getDrivingLicenseNumber());
