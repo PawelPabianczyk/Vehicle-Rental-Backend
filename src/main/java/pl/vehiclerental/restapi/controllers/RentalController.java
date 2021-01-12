@@ -26,7 +26,7 @@ public class RentalController {
     @Autowired
     RentalRepository rentalRepository;
 
-    @GetMapping("/vehicleRentals")
+    @PostMapping("/vehicleRentals")
     @PreAuthorize("hasRole('REGULAR')")
     public ResponseEntity<?> getAllVehicleRentals(@RequestBody VehicleDto vehicleDto) throws JSONException {
         Vehicle vehicle = vehicleRepository.findById(vehicleDto.getId()).get();
