@@ -70,6 +70,7 @@ public class InspectionController {
             jInspection.put("model", i.getVehicle().getModel());
             jInspection.put("yearOfProduction", i.getVehicle().getYearOfProduction());
             jInspection.put("country", i.getVehicle().getCountry());
+            jInspection.put("vehicleId", i.getVehicle().getId());
             jInspections.put(jInspection);
         }
 
