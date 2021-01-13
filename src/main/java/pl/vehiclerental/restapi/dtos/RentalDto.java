@@ -9,6 +9,8 @@ public class RentalDto {
     private LocalDate endDate;
     private String model;
     private Double resPrice;
+    private Long vehicleId;
+    private Long complaintId;
 
     public Long getId() {
         return id;
@@ -56,5 +58,21 @@ public class RentalDto {
 
     public void setResPrice(Double resPrice) {
         this.resPrice = resPrice;
+    }
+
+    public Long getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(Long vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public Long getComplaintId() {
+        return complaintId;
+    }
+
+    public void setComplaintId(Long complaintId) {
+        this.complaintId = complaintId;
     }
 }
