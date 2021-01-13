@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.vehiclerental.restapi.dtos.CustomerDto;
 import pl.vehiclerental.restapi.dtos.VehicleDto;
-import pl.vehiclerental.restapi.models.Customer;
-import pl.vehiclerental.restapi.models.Order;
 import pl.vehiclerental.restapi.models.Rental;
 import pl.vehiclerental.restapi.models.Vehicle;
 import pl.vehiclerental.restapi.repository.CustomerRepository;
@@ -19,7 +16,6 @@ import pl.vehiclerental.restapi.repository.RentalRepository;
 import pl.vehiclerental.restapi.repository.VehicleRepository;
 
 import java.util.List;
-import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -57,6 +53,7 @@ public class RentalController {
     }
 
     @PostMapping("/vehicleRentalsDetails")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
     public ResponseEntity<?> getAllVehicleRentalsDetails(@RequestBody VehicleDto vehicleDto) throws JSONException {
         Vehicle vehicle = vehicleRepository.findById(vehicleDto.getId()).get();
         List<Rental> rentals = rentalRepository.findAllByVehicle(vehicle);
