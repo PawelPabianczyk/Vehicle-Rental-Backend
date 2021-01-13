@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Complaint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String description;
 
@@ -33,5 +33,13 @@ public class Complaint {
 
     public void setRental(Rental rental) {
         this.rental = rental;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

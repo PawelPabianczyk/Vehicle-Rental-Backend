@@ -73,4 +73,12 @@ public class Rental {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Complaint getComplaint() {
+        return complaint;
+    }
+
+    public void setComplaint(Complaint complaint) {
+        this.complaint = complaint;
+    }
 }
