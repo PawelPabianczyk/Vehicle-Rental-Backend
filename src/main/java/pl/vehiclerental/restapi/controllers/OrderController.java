@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.vehiclerental.restapi.dtos.PaymentDto;
 import pl.vehiclerental.restapi.dtos.RentalDto;
 import pl.vehiclerental.restapi.models.*;
 import pl.vehiclerental.restapi.payload.request.AddOrderRequest;
@@ -109,5 +110,19 @@ public class OrderController {
             jOrders.put(jOrder);
         }
         return ResponseEntity.ok(jOrders.toString());
+    }
+
+    @PostMapping("/payment")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> addPayment(@RequestBody PaymentDto paymentDto){
+        Payment payment = new Payment();
+        payment.setDate(LocalDate.now());
+        payment.setMethod("cash");
+        Order order = orderRepository.findById(paymentDto.getOrderId()).get();
+        order.setPaid(true);
+        orderRepository.save(order);
+        payment.setOrder(order);
+        paymentRepository.save(payment);
+        return ResponseEntity.ok("Payment added successfully");
     }
 }
