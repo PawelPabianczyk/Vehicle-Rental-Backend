@@ -1,5 +1,8 @@
 package pl.vehiclerental.restapi.controllers;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -85,5 +88,26 @@ public class OrderController {
             paymentRepository.save(payment);
 
         return ResponseEntity.ok("Order added successfully");
+    }
+
+    @GetMapping("/unpaid")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
+    public ResponseEntity<?> getAllUnpaidOrders() throws JSONException {
+        List<Order> orders = orderRepository.findAllByIsPaid(false);
+
+        JSONArray jOrders = new JSONArray();
+        JSONObject jOrder;
+        for (Order o :
+                orders) {
+            jOrder = new JSONObject();
+            jOrder.put("orderId", o.getId());
+            jOrder.put("customerId", o.getCustomer().getId());
+            jOrder.put("comments", o.getComments());
+            jOrder.put("cost", o.getCost());
+            jOrder.put("date", o.getDate());
+            jOrder.put("date", o.getDate());
+            jOrders.put(jOrder);
+        }
+        return ResponseEntity.ok(jOrders.toString());
     }
 }
