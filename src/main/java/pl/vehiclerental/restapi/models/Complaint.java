@@ -15,6 +15,8 @@ public class Complaint {
     @JoinColumn(name = "rental_id")
     private Rental rental;
 
+    private Boolean isActive;
+
     public Complaint() {
     }
 
@@ -44,5 +46,13 @@ public class Complaint {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }
