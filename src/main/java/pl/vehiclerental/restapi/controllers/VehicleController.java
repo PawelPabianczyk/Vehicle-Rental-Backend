@@ -1,6 +1,5 @@
 package pl.vehiclerental.restapi.controllers;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -8,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import pl.vehiclerental.restapi.dtos.InspectionDto;
 import pl.vehiclerental.restapi.dtos.InsuranceDto;
 import pl.vehiclerental.restapi.dtos.VehicleDto;
-import pl.vehiclerental.restapi.models.*;
+import pl.vehiclerental.restapi.models.Inspection;
+import pl.vehiclerental.restapi.models.Insurance;
+import pl.vehiclerental.restapi.models.Vehicle;
 import pl.vehiclerental.restapi.payload.request.AddVehicleRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.CategoryRepository;
@@ -42,7 +43,7 @@ public class VehicleController {
     public List<VehicleDto> getAllVehicles() {
         List<Vehicle> vehicles = vehicleRepository.findAll();
         return vehicles.stream()
-                .map(this::convertToDto)
+                .map(Converter::convertVehicleToVehicleDto)
                 .collect(Collectors.toList());
     }
 
@@ -50,14 +51,8 @@ public class VehicleController {
     public List<VehicleDto> getAllActiveVehicles() {
         List<Vehicle> vehicles = vehicleRepository.findAllByIsActive(true);
         return vehicles.stream()
-                .map(this::convertToDto)
+                .map(Converter::convertVehicleToVehicleDto)
                 .collect(Collectors.toList());
-    }
-
-    private VehicleDto convertToDto(Vehicle vehicle) {
-        VehicleDto vehicleDto = new ModelMapper().map(vehicle, VehicleDto.class);
-        vehicleDto.setCategory(vehicle.getCategory().getName().name());
-        return vehicleDto;
     }
 
     @PostMapping("/add")

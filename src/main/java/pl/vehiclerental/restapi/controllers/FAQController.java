@@ -10,6 +10,7 @@ import pl.vehiclerental.restapi.models.*;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.EmployeeRepository;
 import pl.vehiclerental.restapi.repository.FAQRepository;
+import pl.vehiclerental.restapi.utilities.Converter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ public class FAQController {
     public List<FAQDto> getAllFAQ() {
         List<FAQ> employees = faqRepository.findAll();
         return employees.stream()
-                .map(this::convertToDto)
+                .map(Converter::convertFAQToFAQDto)
                 .collect(Collectors.toList());
     }
 
@@ -37,19 +38,8 @@ public class FAQController {
     public List<FAQDto> getAllActiveFAQ() {
         List<FAQ> employees = faqRepository.findAllByIsActive(true);
         return employees.stream()
-                .map(this::convertToDto)
+                .map(Converter::convertFAQToFAQDto)
                 .collect(Collectors.toList());
-    }
-
-    private FAQDto convertToDto(FAQ faq){
-        FAQDto faqDto = new ModelMapper().map(faq, FAQDto.class);
-        if(faq.getEmployee() == null){
-            faqDto.setEmployeeId(null);
-        }
-        else{
-            faqDto.setEmployeeId(faq.getEmployee().getId());
-        }
-        return faqDto;
     }
 
     @PostMapping("/deactivate")

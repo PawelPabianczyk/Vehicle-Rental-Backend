@@ -16,6 +16,7 @@ import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.CustomerRepository;
 import pl.vehiclerental.restapi.repository.PersonalInformationRepository;
 import pl.vehiclerental.restapi.repository.UserRepository;
+import pl.vehiclerental.restapi.utilities.Converter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,18 +40,8 @@ public class CustomerController {
     public List<CustomerDto> getAllCustomers() {
         List<Customer> customers = (List<Customer>) customerRepository.findAll();
         return customers.stream()
-                .map(this::convertToDto)
+                .map(Converter::convertCustomerToCustomerDto)
                 .collect(Collectors.toList());
-    }
-
-    private CustomerDto convertToDto(Customer customer){
-        CustomerDto customerDto = new ModelMapper().map(customer, CustomerDto.class);
-        customerDto.setUserId(customer.getUser().getId());
-        if (customer.getVerified())
-            customerDto.setStatus("verified");
-        else
-            customerDto.setStatus("unverified");
-        return customerDto;
     }
 
     @GetMapping("/unverified")

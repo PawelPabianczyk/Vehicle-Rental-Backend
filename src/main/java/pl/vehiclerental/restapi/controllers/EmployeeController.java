@@ -177,19 +177,6 @@ public class EmployeeController {
         return ResponseEntity.ok(new MessageResponse("Employee activated successfully!"));
     }
 
-    private EmployeeDto convertToDto(Employee employee) {
-        EmployeeDto employeeDto = new ModelMapper().map(employee, EmployeeDto.class);
-        employeeDto.setUserId(employee.getUser().getId());
-        employeeDto.setJobTitle(employee.getJob().getTitle());
-        Employee boss = employee.getBoss();
-        if(boss != null){
-            employeeDto.setBossId(boss.getId());
-        }
-        else{
-            employeeDto.setBossId(null);
-        }
-        return employeeDto;
-    }
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
