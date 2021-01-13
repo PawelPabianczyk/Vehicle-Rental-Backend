@@ -7,13 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.vehiclerental.restapi.dtos.CustomerDto;
 import pl.vehiclerental.restapi.dtos.VehicleDto;
+import pl.vehiclerental.restapi.models.Customer;
+import pl.vehiclerental.restapi.models.Order;
 import pl.vehiclerental.restapi.models.Rental;
 import pl.vehiclerental.restapi.models.Vehicle;
+import pl.vehiclerental.restapi.repository.CustomerRepository;
+import pl.vehiclerental.restapi.repository.OrderRepository;
 import pl.vehiclerental.restapi.repository.RentalRepository;
 import pl.vehiclerental.restapi.repository.VehicleRepository;
 
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -25,6 +31,12 @@ public class RentalController {
 
     @Autowired
     RentalRepository rentalRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
+    OrderRepository orderRepository;
 
     @PostMapping("/vehicleRentals")
     public ResponseEntity<?> getAllVehicleRentals(@RequestBody VehicleDto vehicleDto) throws JSONException {
@@ -42,5 +54,39 @@ public class RentalController {
             jRentals.put(jRental);
         }
         return ResponseEntity.ok(jRentals.toString());
+    }
+
+    @PostMapping("/vehicleRentalsDetails")
+    public ResponseEntity<?> getAllVehicleRentalsDetails(@RequestBody VehicleDto vehicleDto) throws JSONException {
+        Vehicle vehicle = vehicleRepository.findById(vehicleDto.getId()).get();
+        List<Rental> rentals = rentalRepository.findAllByVehicle(vehicle);
+
+        JSONObject response = new JSONObject();
+        response.put("vehicleId",vehicle.getId());
+        response.put("brand",vehicle.getBrand());
+        response.put("model",vehicle.getModel());
+        response.put("category",vehicle.getCategory().getName());
+        response.put("price",vehicle.getPrice());
+        response.put("country",vehicle.getCountry());
+        response.put("year",vehicle.getYearOfProduction());
+        response.put("power",vehicle.getPower());
+        response.put("description",vehicle.getDescription());
+
+        JSONArray jRentals = new JSONArray();
+        JSONObject jRental;
+
+        for (Rental r :
+                rentals) {
+            jRental = new JSONObject();
+            jRental.put("id", r.getId());
+            jRental.put("cost", r.getCost());
+            jRental.put("startDate", r.getStartDate());
+            jRental.put("endDate", r.getEndDate());
+            jRentals.put(jRental);
+        }
+
+        response.put("rentals",jRentals);
+
+        return ResponseEntity.ok(response.toString());
     }
 }
