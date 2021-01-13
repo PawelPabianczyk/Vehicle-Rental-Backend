@@ -19,6 +19,9 @@ public class Payment {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    public Payment() {
+    }
+
     public Payment(LocalDate date, String method) {
         this.date = date;
         this.method = method;
