@@ -106,6 +106,8 @@ public class OrderController {
             jOrder = new JSONObject();
             jOrder.put("orderId", o.getId());
             jOrder.put("customerId", o.getCustomer().getId());
+            jOrder.put("firstName", o.getCustomer().getUser().getPersonalInformation().getFirstName());
+            jOrder.put("lastName", o.getCustomer().getUser().getPersonalInformation().getLastName());
             jOrder.put("comments", o.getComments());
             jOrder.put("cost", o.getCost());
             jOrder.put("date", o.getDate());
