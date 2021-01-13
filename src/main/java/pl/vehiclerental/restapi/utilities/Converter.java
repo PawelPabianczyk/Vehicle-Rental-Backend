@@ -76,6 +76,13 @@ public class Converter {
         return category;
     }
 
+    public static CommentDto convertCommentToCommentDto(Comment comment){
+        CommentDto commentDto = new ModelMapper().map(comment, CommentDto.class);
+        commentDto.setVehicleId(comment.getVehicle().getId());
+        commentDto.setCustomerUsername(comment.getCustomer().getUser().getUsername());
+        return commentDto;
+    }
+
     public static CustomerDto convertCustomerToCustomerDto(Customer customer){
         CustomerDto customerDto = new ModelMapper().map(customer, CustomerDto.class);
         customerDto.setUserId(customer.getUser().getId());
