@@ -15,6 +15,9 @@ public class Complaint {
     @JoinColumn(name = "rental_id")
     private Rental rental;
 
+    public Complaint() {
+    }
+
     public Complaint(String description) {
         this.description = description;
     }
