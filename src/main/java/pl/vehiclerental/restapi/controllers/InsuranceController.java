@@ -71,6 +71,7 @@ public class InsuranceController {
             jInsurance.put("model", i.getVehicle().getModel());
             jInsurance.put("yearOfProduction", i.getVehicle().getYearOfProduction());
             jInsurance.put("country", i.getVehicle().getCountry());
+            jInsurance.put("vehicleId", i.getVehicle().getId());
             jInsurances.put(jInsurance);
         }
 
