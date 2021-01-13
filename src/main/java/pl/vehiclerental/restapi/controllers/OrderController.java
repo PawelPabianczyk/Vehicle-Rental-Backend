@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.vehiclerental.restapi.dtos.CustomerDto;
+import pl.vehiclerental.restapi.dtos.OrderDto;
 import pl.vehiclerental.restapi.dtos.PaymentDto;
 import pl.vehiclerental.restapi.dtos.RentalDto;
 import pl.vehiclerental.restapi.models.*;
 import pl.vehiclerental.restapi.payload.request.AddOrderRequest;
 import pl.vehiclerental.restapi.repository.*;
+import pl.vehiclerental.restapi.utilities.Converter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -124,5 +127,20 @@ public class OrderController {
         payment.setOrder(order);
         paymentRepository.save(payment);
         return ResponseEntity.ok("Payment added successfully");
+    }
+
+    @PostMapping("/customerOrders")
+    @PreAuthorize("hasRole('REGULAR') or hasRole('USER')")
+    public Set<OrderDto> getAllCustomerOrders(@RequestBody CustomerDto customerDto) throws JSONException{
+        Customer customer = customerRepository.findById(customerDto.getId()).get();
+        List<Order> orderList = orderRepository.findAllByCustomer(customer);
+        Set<OrderDto> orderDtoList = new HashSet<>();
+
+        for (Order o :
+                orderList) {
+            orderDtoList.add(Converter.convertOrderToOrderDto(o));
+        }
+
+        return orderDtoList;
     }
 }
