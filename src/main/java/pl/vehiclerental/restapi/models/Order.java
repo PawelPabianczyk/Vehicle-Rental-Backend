@@ -8,7 +8,6 @@ import java.util.Set;
 @Entity
 @Table(	name = "orders")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +18,7 @@ public class Order {
 
     private double cost;
 
-    private String paymentStatus;
+    private Boolean isPaid;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "order_rentals",
@@ -31,11 +30,11 @@ public class Order {
             fetch = FetchType.LAZY, optional = false)
     private Payment payment;
 
-    public Order(String comments, LocalDate date, double cost, String paymentStatus) {
-        this.comments = comments;
-        this.date = date;
-        this.cost = cost;
-        this.paymentStatus = paymentStatus;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="customer_id")
+    private Customer customer;
+
+    public Order() {
     }
 
     public String getComments() {
@@ -62,12 +61,12 @@ public class Order {
         this.cost = cost;
     }
 
-    public String getPaymentStatus() {
-        return paymentStatus;
+    public Boolean getPaid() {
+        return isPaid;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
+    public void setPaid(Boolean paid) {
+        isPaid = paid;
     }
 
     public Set<Rental> getRentals() {
@@ -76,5 +75,29 @@ public class Order {
 
     public void setRentals(Set<Rental> rentals) {
         this.rentals = rentals;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }
