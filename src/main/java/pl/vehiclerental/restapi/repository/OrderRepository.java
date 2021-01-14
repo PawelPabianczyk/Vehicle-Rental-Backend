@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    List<Order> findAllByCustomer(Customer customer);
+    List<Order> findAllByCustomerOrderByDateDesc(Customer customer);
 
     List<Order> findAllByIsPaid(Boolean isPaid);
 }
