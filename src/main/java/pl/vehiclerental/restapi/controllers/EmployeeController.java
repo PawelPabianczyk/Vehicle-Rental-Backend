@@ -177,7 +177,6 @@ public class EmployeeController {
         return ResponseEntity.ok(new MessageResponse("Employee activated successfully!"));
     }
 
-
     @PostMapping("/update")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> updateEmployee(@RequestBody UpdateEmployeeRequest request){
