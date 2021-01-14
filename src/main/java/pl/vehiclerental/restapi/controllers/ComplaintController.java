@@ -60,10 +60,8 @@ public class ComplaintController {
 
             Object customerId = em.createNativeQuery("SELECT o.customer_id FROM orders o " +
                     "JOIN order_rentals orr ON o.id=orr.order_id " +
-                    "JOIN rentals r ON orr.rental_id=r.id WHERE r.id=" + c.getRental().getId())
+                    "WHERE orr.rental_id=" + c.getRental().getId())
                     .getSingleResult();
-
-
 
             Customer customer = customerRepository.findById(Long.parseLong(customerId.toString())).get();
             jComplaint.put("firstName", customer.getUser().getPersonalInformation().getFirstName());
