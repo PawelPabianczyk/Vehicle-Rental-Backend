@@ -2,25 +2,15 @@ package pl.vehiclerental.restapi.dtos;
 
 public class VehicleDto {
     private Long id;
-
     private String brand;
-
     private String model;
-
     private Integer yearOfProduction;
-
     private String country;
-
     private Double power;
-
     private Double price;
-
     private String description;
-
     private String pictureUrl;
-
     private String category;
-
     private Boolean isActive;
 
     public Long getId() {

@@ -1,5 +1,8 @@
 package pl.vehiclerental.restapi.controllers;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +21,7 @@ import pl.vehiclerental.restapi.repository.InsuranceRepository;
 import pl.vehiclerental.restapi.repository.VehicleRepository;
 import pl.vehiclerental.restapi.utilities.Converter;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +42,9 @@ public class VehicleController {
     @Autowired
     InspectionRepository inspectionRepository;
 
+    @Autowired
+    EntityManager em;
+
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
     public List<VehicleDto> getAllVehicles() {
@@ -48,11 +55,39 @@ public class VehicleController {
     }
 
     @GetMapping("/active")
-    public List<VehicleDto> getAllActiveVehicles() {
+    public ResponseEntity<?> getAllActiveVehicles() throws JSONException {
         List<Vehicle> vehicles = vehicleRepository.findAllByIsActive(true);
-        return vehicles.stream()
-                .map(Converter::convertVehicleToVehicleDto)
-                .collect(Collectors.toList());
+
+        JSONArray jVehicles = new JSONArray();
+        JSONObject jVehicle;
+
+        for (Vehicle v :
+                vehicles) {
+            jVehicle = new JSONObject();
+            jVehicle.put("id", v.getId());
+            jVehicle.put("brand", v.getBrand());
+            jVehicle.put("model", v.getModel());
+            jVehicle.put("yearOfProduction", v.getYearOfProduction());
+            jVehicle.put("country", v.getCountry());
+            jVehicle.put("power", v.getPower());
+            jVehicle.put("price", v.getPrice());
+            jVehicle.put("description", v.getDescription());
+            jVehicle.put("pictureUrl", v.getPictureUrl());
+            jVehicle.put("category", v.getCategory().getName().name());
+
+            Object objVehicleId = em.createNativeQuery("SELECT MAX(o.discount) FROM offers o " +
+                    "JOIN offer_vehicle ov ON o.id=ov.offer_id WHERE ov.vehicle_id=" + v.getId())
+                    .getSingleResult();
+
+            if (objVehicleId != null)
+                jVehicle.put("discount", Double.parseDouble(objVehicleId.toString()));
+            else
+                jVehicle.put("discount", 0);
+
+            jVehicles.put(jVehicle);
+        }
+
+        return ResponseEntity.ok(jVehicles.toString());
     }
 
     @PostMapping("/add")
