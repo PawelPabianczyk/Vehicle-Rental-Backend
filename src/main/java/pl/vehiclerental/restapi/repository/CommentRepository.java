@@ -12,4 +12,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> findAllByVehicle(Vehicle vehicle);
 
+    List<Comment> findAllByVehicleOrderByDateDesc(Vehicle vehicle);
+
 }

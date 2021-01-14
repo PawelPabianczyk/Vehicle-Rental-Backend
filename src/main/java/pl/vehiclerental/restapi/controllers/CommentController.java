@@ -40,7 +40,7 @@ public class CommentController {
     public List<CommentDto> getAllComments(@RequestBody VehicleDto vehicleDto) {
         Vehicle vehicle = vehicleRepository.findById(vehicleDto.getId()).get();
 
-        List<Comment> comments = commentRepository.findAllByVehicle(vehicle);
+        List<Comment> comments = commentRepository.findAllByVehicleOrderByDateDesc(vehicle);
 
         return comments.stream()
                 .map(Converter::convertCommentToCommentDto)
@@ -54,7 +54,11 @@ public class CommentController {
         User user = userRepository.findByUsername(commentDto.getCustomerUsername()).get();
         Comment comment = new Comment();
         comment.setMessage(commentDto.getMessage());
-        comment.setCustomer(user.getCustomer());
+
+        if (user.getCustomer() != null)
+            comment.setCustomer(user.getCustomer());
+        else
+            comment.setCustomer(null);
         comment.setVehicle(vehicle);
         comment.setDate(LocalDateTime.now());
         commentRepository.save(comment);

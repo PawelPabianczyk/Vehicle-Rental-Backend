@@ -79,7 +79,12 @@ public class Converter {
     public static CommentDto convertCommentToCommentDto(Comment comment) {
         CommentDto commentDto = new ModelMapper().map(comment, CommentDto.class);
         commentDto.setVehicleId(comment.getVehicle().getId());
-        commentDto.setCustomerUsername(comment.getCustomer().getUser().getUsername());
+
+        if (comment.getCustomer() != null)
+            commentDto.setCustomerUsername(comment.getCustomer().getUser().getUsername());
+        else
+            commentDto.setCustomerUsername("Customer service");
+
         return commentDto;
     }
 
