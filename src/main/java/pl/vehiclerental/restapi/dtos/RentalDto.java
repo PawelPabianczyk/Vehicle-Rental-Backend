@@ -75,4 +75,16 @@ public class RentalDto {
     public void setComplaintId(Long complaintId) {
         this.complaintId = complaintId;
     }
+
+    @Override
+    public String toString() {
+        return "id:"+id+
+                "brand:"+brand+
+                "model:"+model+
+                "startDate:"+startDate+
+                "endDate:"+endDate+
+                "resPrice:"+resPrice+
+                "vehicleId:"+vehicleId+
+                "complaintId:"+complaintId;
+    }
 }
