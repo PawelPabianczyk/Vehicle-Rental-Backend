@@ -1,6 +1,7 @@
 package pl.vehiclerental.restapi.models;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(	name = "comments")
@@ -19,6 +20,8 @@ public class Comment {
     private Vehicle vehicle;
 
     private String message;
+
+    private LocalDateTime date;
 
     public Customer getCustomer() {
         return customer;
@@ -50,5 +53,13 @@ public class Comment {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }

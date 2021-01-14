@@ -15,6 +15,7 @@ import pl.vehiclerental.restapi.repository.UserRepository;
 import pl.vehiclerental.restapi.repository.VehicleRepository;
 import pl.vehiclerental.restapi.utilities.Converter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,7 @@ public class CommentController {
         comment.setMessage(commentDto.getMessage());
         comment.setCustomer(user.getCustomer());
         comment.setVehicle(vehicle);
+        comment.setDate(LocalDateTime.now());
         commentRepository.save(comment);
 
         return ResponseEntity.ok("Comment added successfully");
