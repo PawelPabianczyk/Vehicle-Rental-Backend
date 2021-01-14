@@ -59,16 +59,6 @@ public class RentalController {
         List<Rental> rentals = rentalRepository.findAllByVehicleOrderByStartDateDesc(vehicle);
 
         JSONObject response = new JSONObject();
-        response.put("vehicleId",vehicle.getId());
-        response.put("brand",vehicle.getBrand());
-        response.put("model",vehicle.getModel());
-        response.put("category",vehicle.getCategory().getName());
-        response.put("price",vehicle.getPrice());
-        response.put("country",vehicle.getCountry());
-        response.put("year",vehicle.getYearOfProduction());
-        response.put("power",vehicle.getPower());
-        response.put("description",vehicle.getDescription());
-
         JSONArray jRentals = new JSONArray();
         JSONObject jRental;
 
@@ -83,7 +73,6 @@ public class RentalController {
         }
 
         response.put("rentals",jRentals);
-
         return ResponseEntity.ok(response.toString());
     }
 }
