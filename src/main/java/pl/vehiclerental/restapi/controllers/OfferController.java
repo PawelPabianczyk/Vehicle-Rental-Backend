@@ -11,6 +11,7 @@ import pl.vehiclerental.restapi.dtos.OfferDto;
 import pl.vehiclerental.restapi.models.Employee;
 import pl.vehiclerental.restapi.models.Offer;
 import pl.vehiclerental.restapi.models.Vehicle;
+import pl.vehiclerental.restapi.payload.response.MessageResponse;
 import pl.vehiclerental.restapi.repository.EmployeeRepository;
 import pl.vehiclerental.restapi.repository.OfferRepository;
 import pl.vehiclerental.restapi.repository.VehicleRepository;
@@ -89,5 +90,60 @@ public class OfferController {
         }
 
         return ResponseEntity.ok(jOffers.toString());
+    }
+
+    @GetMapping("/active")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> getAllActiveOffers() throws JSONException{
+        List<Offer> offerList = offerRepository.findAllByIsActive(true);
+        JSONArray jOffers = new JSONArray();
+        JSONObject jOffer;
+
+        for (Offer o :
+                offerList) {
+            jOffer = new JSONObject();
+            jOffer.put("employeeUsername",o.getEmployee().getUser().getUsername());
+            jOffer.put("firstName",o.getEmployee().getUser().getPersonalInformation().getFirstName());
+            jOffer.put("lastName",o.getEmployee().getUser().getPersonalInformation().getLastName());
+            jOffer.put("offerId", o.getId());
+            jOffer.put("description", o.getDescription());
+            jOffer.put("discount", o.getDiscount());
+
+            Set<Vehicle> vehicles = o.getVehicles();
+            JSONArray jVehicles = new JSONArray();
+            JSONObject jVehicle;
+
+            for (Vehicle v :
+                    vehicles) {
+                jVehicle = new JSONObject();
+                jVehicle.put("vehicleId", v.getId());
+                jVehicle.put("brand", v.getBrand());
+                jVehicle.put("model", v.getModel());
+                jVehicle.put("price", v.getPrice());
+                jVehicles.put(jVehicle);
+            }
+            jOffer.put("vehicles",jVehicles);
+            jOffers.put(jOffer);
+        }
+
+        return ResponseEntity.ok(jOffers.toString());
+    }
+
+    @PostMapping("/deactivate")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> deactivateOffer(@RequestBody OfferDto offerDto){
+        Offer offer = offerRepository.findById(offerDto.getId()).get();
+        offer.setActive(false);
+        offerRepository.save(offer);
+        return ResponseEntity.ok(new MessageResponse("Offer deactivated successfully!"));
+    }
+
+    @PostMapping("/activate")
+    @PreAuthorize("hasRole('REGULAR')")
+    public ResponseEntity<?> activateOffer(@RequestBody OfferDto offerDto){
+        Offer offer = offerRepository.findById(offerDto.getId()).get();
+        offer.setActive(true);
+        offerRepository.save(offer);
+        return ResponseEntity.ok(new MessageResponse("Offer activated successfully!"));
     }
 }

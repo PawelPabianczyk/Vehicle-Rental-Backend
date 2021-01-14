@@ -26,6 +26,8 @@ public class Offer {
             inverseJoinColumns = @JoinColumn(name = "vehicle_id"))
     private Set<Vehicle> vehicles = new HashSet<>();
 
+    private Boolean isActive;
+
     public Double getDiscount() {
         return discount;
     }
@@ -64,5 +66,13 @@ public class Offer {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }
