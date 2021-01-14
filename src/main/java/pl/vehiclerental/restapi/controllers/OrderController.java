@@ -133,10 +133,10 @@ public class OrderController {
 
     @PostMapping("/customerOrders")
     @PreAuthorize("hasRole('REGULAR') or hasRole('USER')")
-    public Set<OrderDto> getAllCustomerOrders(@RequestBody CustomerDto customerDto) throws JSONException{
+    public List<OrderDto> getAllCustomerOrders(@RequestBody CustomerDto customerDto) throws JSONException{
         Customer customer = customerRepository.findById(customerDto.getId()).get();
         List<Order> orderList = orderRepository.findAllByCustomerOrderByDateDesc(customer);
-        Set<OrderDto> orderDtoList = new HashSet<>();
+        List<OrderDto> orderDtoList = new ArrayList<>();
 
         for (Order o :
                 orderList) {
