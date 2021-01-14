@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class Converter {
 
-    public static Set<Role> stringsToRoles(RoleRepository roleRepository, Set<String> strRoles){
+    public static Set<Role> stringsToRoles(RoleRepository roleRepository, Set<String> strRoles) {
         Set<Role> roles = new HashSet<>();
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -47,7 +47,7 @@ public class Converter {
         return roles;
     }
 
-    public static Category stringsToCategory(CategoryRepository categoryRepository, String strCategory){
+    public static Category stringsToCategory(CategoryRepository categoryRepository, String strCategory) {
         Category category;
         switch (strCategory) {
             case "SEDAN":
@@ -76,14 +76,14 @@ public class Converter {
         return category;
     }
 
-    public static CommentDto convertCommentToCommentDto(Comment comment){
+    public static CommentDto convertCommentToCommentDto(Comment comment) {
         CommentDto commentDto = new ModelMapper().map(comment, CommentDto.class);
         commentDto.setVehicleId(comment.getVehicle().getId());
         commentDto.setCustomerUsername(comment.getCustomer().getUser().getUsername());
         return commentDto;
     }
 
-    public static CustomerDto convertCustomerToCustomerDto(Customer customer){
+    public static CustomerDto convertCustomerToCustomerDto(Customer customer) {
         CustomerDto customerDto = new ModelMapper().map(customer, CustomerDto.class);
         customerDto.setUserId(customer.getUser().getId());
         if (customer.getVerified())
@@ -93,12 +93,11 @@ public class Converter {
         return customerDto;
     }
 
-    public static FAQDto convertFAQToFAQDto(FAQ faq){
+    public static FAQDto convertFAQToFAQDto(FAQ faq) {
         FAQDto faqDto = new ModelMapper().map(faq, FAQDto.class);
-        if(faq.getEmployee() == null){
+        if (faq.getEmployee() == null) {
             faqDto.setEmployeeId(null);
-        }
-        else{
+        } else {
             faqDto.setEmployeeId(faq.getEmployee().getId());
         }
         return faqDto;
@@ -109,20 +108,24 @@ public class Converter {
         employeeDto.setUserId(employee.getUser().getId());
         employeeDto.setJobTitle(employee.getJob().getTitle());
         Employee boss = employee.getBoss();
-        if(boss != null){
+        if (boss != null) {
             employeeDto.setBossId(boss.getId());
-        }
-        else{
+        } else {
             employeeDto.setBossId(null);
         }
         return employeeDto;
     }
 
-    public static OrderDto convertOrderToOrderDto(Order order){
+    public static OrderDto convertOrderToOrderDto(Order order) {
         OrderDto orderDto = new ModelMapper().map(order, OrderDto.class);
         orderDto.setCustomerId(order
-        .getCustomer().getId());
-        orderDto.setPayment(Converter.convertPaymentToPaymentDto(order.getPayment()));
+                .getCustomer().getId());
+
+        if (order.getPayment() != null)
+            orderDto.setPayment(Converter.convertPaymentToPaymentDto(order.getPayment()));
+        else
+            orderDto.setPayment(null);
+
         Set<Rental> rentalSet = order.getRentals();
         Set<RentalDto> rentalDtos = new HashSet<>();
 
@@ -140,13 +143,13 @@ public class Converter {
         return personalInformationDto;
     }
 
-    public static PaymentDto convertPaymentToPaymentDto(Payment payment){
+    public static PaymentDto convertPaymentToPaymentDto(Payment payment) {
         PaymentDto paymentDto = new ModelMapper().map(payment, PaymentDto.class);
         paymentDto.setOrderId(payment.getOrder().getId());
         return paymentDto;
     }
 
-    public static RentalDto convertRentalToRentalDto(Rental rental){
+    public static RentalDto convertRentalToRentalDto(Rental rental) {
         RentalDto rentalDto = new ModelMapper().map(rental, RentalDto.class);
 
         if (rental.getComplaint() != null)
