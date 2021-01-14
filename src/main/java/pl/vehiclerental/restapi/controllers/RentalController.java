@@ -56,7 +56,7 @@ public class RentalController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
     public ResponseEntity<?> getAllVehicleRentalsDetails(@RequestBody VehicleDto vehicleDto) throws JSONException {
         Vehicle vehicle = vehicleRepository.findById(vehicleDto.getId()).get();
-        List<Rental> rentals = rentalRepository.findAllByVehicle(vehicle);
+        List<Rental> rentals = rentalRepository.findAllByVehicleOrderByStartDateDesc(vehicle);
 
         JSONObject response = new JSONObject();
         response.put("vehicleId",vehicle.getId());
