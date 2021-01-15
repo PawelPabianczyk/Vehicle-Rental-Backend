@@ -21,6 +21,12 @@ public class TestController {
         return "User Content.";
     }
 
+    @GetMapping("/employee")
+    @PreAuthorize("hasRole('REGULAR')")
+    public String employeeAccess() {
+        return "Employee Board.";
+    }
+
     @GetMapping("/manager")
     @PreAuthorize("hasRole('MANAGER')")
     public String moderatorAccess() {

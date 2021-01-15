@@ -28,7 +28,6 @@ public class JobHistoryController {
     @Autowired
     EmployeeRepository employeeRepository;
 
-
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllJobHistory() throws JSONException {

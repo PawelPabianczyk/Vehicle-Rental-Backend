@@ -46,7 +46,7 @@ public class VehicleController {
     EntityManager em;
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
+    @PreAuthorize("hasRole('REGULAR')")
     public List<VehicleDto> getAllVehicles() {
         List<Vehicle> vehicles = vehicleRepository.findAll();
         return vehicles.stream()
@@ -91,7 +91,7 @@ public class VehicleController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> addVehicle(@RequestBody AddVehicleRequest addVehicleRequest) {
 
         VehicleDto vehicleDto = addVehicleRequest.getVehicleDto();

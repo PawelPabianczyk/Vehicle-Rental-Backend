@@ -45,7 +45,7 @@ public class CustomerController {
     }
 
     @GetMapping("/unverified")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
+    @PreAuthorize("hasRole('REGULAR')")
     public ResponseEntity<?> getAllUnverifiedCustomers() throws JSONException {
         List<Customer> customers = customerRepository.findAllByIsVerifiedAndDrivingLicenseNumberIsNotNull(false);
 
@@ -67,7 +67,7 @@ public class CustomerController {
     }
 
     @GetMapping("/verified")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
+    @PreAuthorize("hasRole('REGULAR')")
     public ResponseEntity<?> getAllVerifiedCustomers() throws JSONException {
         List<Customer> customers = customerRepository.findAllByIsVerified(true);
 
@@ -125,7 +125,7 @@ public class CustomerController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
+    @PreAuthorize("hasRole('REGULAR') or hasRole('USER')")
     public ResponseEntity<?> updateCustomer(@RequestBody CustomerDto customerDto){
         Customer customer = customerRepository.findById(customerDto.getId()).get();
 
@@ -146,7 +146,7 @@ public class CustomerController {
     }
 
     @PostMapping("/license")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
+    @PreAuthorize("hasRole('REGULAR') or hasRole('USER')")
     public ResponseEntity<?> getCustomerLicense(@RequestBody CustomerDto customerDto) throws JSONException {
         Customer customer = customerRepository.findById(customerDto.getId()).get();
         JSONObject jCustomer = new JSONObject();
@@ -155,7 +155,7 @@ public class CustomerController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR') or hasRole('USER')")
+    @PreAuthorize("hasRole('REGULAR') or hasRole('USER')")
     public ResponseEntity<?> addCustomer(@RequestBody CustomerDto customerDto){
         User user = userRepository.findById(customerDto.getUserId()).get();
 

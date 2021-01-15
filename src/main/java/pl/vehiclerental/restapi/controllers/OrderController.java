@@ -95,7 +95,7 @@ public class OrderController {
     }
 
     @GetMapping("/unpaid")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
+    @PreAuthorize("hasRole('REGULAR')")
     public ResponseEntity<?> getAllUnpaidOrders() throws JSONException {
         List<Order> orders = orderRepository.findAllByIsPaid(false);
 

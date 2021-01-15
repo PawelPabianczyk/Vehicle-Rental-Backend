@@ -113,7 +113,7 @@ public class ComplaintController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('REGULAR') or hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> addComplaint(@RequestBody ComplaintDto complaintDto){
         Rental rental = rentalRepository.findById(complaintDto.getRentalId()).get();
 

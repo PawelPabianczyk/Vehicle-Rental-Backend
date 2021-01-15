@@ -47,7 +47,7 @@ public class RentalController {
     }
 
     @PostMapping("/vehicleRentalsDetails")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('REGULAR')")
+    @PreAuthorize("hasRole('REGULAR')")
     public ResponseEntity<?> getAllVehicleRentalsDetails(@RequestBody VehicleDto vehicleDto) throws JSONException {
         Vehicle vehicle = vehicleRepository.findById(vehicleDto.getId()).get();
         List<Rental> rentals = rentalRepository.findAllByVehicleOrderByStartDateDesc(vehicle);

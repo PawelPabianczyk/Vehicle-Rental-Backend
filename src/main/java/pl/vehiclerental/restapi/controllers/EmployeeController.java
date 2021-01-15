@@ -53,7 +53,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/active")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> getActiveEmployees() throws JSONException {
         List<Employee> employees = employeeRepository.findAllByIsActive(true);
         JSONArray jEmployees = new JSONArray();
@@ -177,7 +177,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> updateEmployee(@RequestBody UpdateEmployeeRequest request){
         User user = userRepository.findById(request.getUserId()).get();
 
