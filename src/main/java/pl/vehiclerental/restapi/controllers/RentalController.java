@@ -28,12 +28,6 @@ public class RentalController {
     @Autowired
     RentalRepository rentalRepository;
 
-    @Autowired
-    CustomerRepository customerRepository;
-
-    @Autowired
-    OrderRepository orderRepository;
-
     @PostMapping("/vehicleRentals")
     public ResponseEntity<?> getAllVehicleRentals(@RequestBody VehicleDto vehicleDto) throws JSONException {
         Vehicle vehicle = vehicleRepository.findById(vehicleDto.getId()).get();

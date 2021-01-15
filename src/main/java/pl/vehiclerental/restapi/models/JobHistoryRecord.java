@@ -12,7 +12,6 @@ public class JobHistoryRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;

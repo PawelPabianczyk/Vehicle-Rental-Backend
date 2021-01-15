@@ -15,14 +15,13 @@ import pl.vehiclerental.restapi.models.Role;
 import pl.vehiclerental.restapi.models.User;
 import pl.vehiclerental.restapi.payload.request.UpdateUserRequest;
 import pl.vehiclerental.restapi.payload.response.MessageResponse;
-import pl.vehiclerental.restapi.repository.*;
+import pl.vehiclerental.restapi.repository.JobHistoryRecordRepository;
+import pl.vehiclerental.restapi.repository.RoleRepository;
+import pl.vehiclerental.restapi.repository.UserRepository;
 import pl.vehiclerental.restapi.utilities.Converter;
 
 import javax.validation.Valid;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
@@ -34,13 +33,7 @@ import java.util.Set;
 public class UserController {
 
     @Autowired
-    CustomerRepository customerRepository;
-
-    @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    PersonalInformationRepository personalInformationRepository;
 
     @Autowired
     RoleRepository roleRepository;

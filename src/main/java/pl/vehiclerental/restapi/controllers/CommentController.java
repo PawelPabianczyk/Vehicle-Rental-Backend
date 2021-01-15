@@ -31,9 +31,6 @@ public class CommentController {
     VehicleRepository vehicleRepository;
 
     @Autowired
-    CustomerRepository customerRepository;
-
-    @Autowired
     UserRepository userRepository;
 
     @PostMapping("/all")
