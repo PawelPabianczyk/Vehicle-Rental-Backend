@@ -49,8 +49,9 @@ public class ComplaintController {
                 complaints) {
             jComplaint = new JSONObject();
             jComplaint.put("description",c.getDescription());
+            jComplaint.put("complaintId",c.getId());
             RentalDto r = Converter.convertRentalToRentalDto(c.getRental());
-            jComplaint.put("id",r.getId());
+            jComplaint.put("rentalId",r.getId());
             jComplaint.put("brand",r.getBrand());
             jComplaint.put("model",r.getModel());
             jComplaint.put("startDate",r.getStartDate());
@@ -84,9 +85,10 @@ public class ComplaintController {
         for (Complaint c :
                 complaints) {
             jComplaint = new JSONObject();
+            jComplaint.put("complaintId",c.getId());
             jComplaint.put("description",c.getDescription());
             RentalDto r = Converter.convertRentalToRentalDto(c.getRental());
-            jComplaint.put("id",r.getId());
+            jComplaint.put("rentalId",r.getId());
             jComplaint.put("brand",r.getBrand());
             jComplaint.put("model",r.getModel());
             jComplaint.put("startDate",r.getStartDate());
