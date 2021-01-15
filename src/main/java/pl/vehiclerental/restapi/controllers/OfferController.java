@@ -42,6 +42,7 @@ public class OfferController {
         offer.setEmployee(employee);
         offer.setDiscount(offerDto.getDiscount());
         offer.setDescription(offerDto.getDescription());
+        offer.setActive(true);
 
         Set<Vehicle> vehicles = new HashSet<>();
         for (Long id:
