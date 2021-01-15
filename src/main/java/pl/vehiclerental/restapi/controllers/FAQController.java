@@ -26,6 +26,7 @@ public class FAQController {
     EmployeeRepository employeeRepository;
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('REGULAR')")
     public List<FAQDto> getAllFAQ() {
         List<FAQ> employees = faqRepository.findAll();
         return employees.stream()

@@ -120,6 +120,7 @@ public class ComplaintController {
         Complaint complaint = new Complaint();
         complaint.setDescription(complaintDto.getDescription());
         complaint.setRental(rental);
+        complaint.setActive(true);
         complaintRepository.save(complaint);
         rental.setComplaint(complaint);
         rentalRepository.save(rental);
