@@ -76,7 +76,7 @@ public class VehicleController {
             jVehicle.put("category", v.getCategory().getName().name());
 
             Object objVehicleId = em.createNativeQuery("SELECT MAX(o.discount) FROM offers o " +
-                    "JOIN offer_vehicle ov ON o.id=ov.offer_id WHERE ov.vehicle_id=" + v.getId())
+                    "JOIN offer_vehicle ov ON o.id=ov.offer_id WHERE o.is_active=1 AND ov.vehicle_id=" + v.getId())
                     .getSingleResult();
 
             if (objVehicleId != null)
