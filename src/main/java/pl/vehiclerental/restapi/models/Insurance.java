@@ -17,7 +17,7 @@ public class Insurance {
 
     private double price;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="vehicle_id")
     private Vehicle vehicle;
 
