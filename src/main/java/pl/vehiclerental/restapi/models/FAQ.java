@@ -14,7 +14,7 @@ public class FAQ {
 
     private String answer;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="employee_id")
     private Employee employee;
 

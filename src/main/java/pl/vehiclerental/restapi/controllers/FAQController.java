@@ -28,16 +28,16 @@ public class FAQController {
     @GetMapping("/all")
     @PreAuthorize("hasRole('REGULAR')")
     public List<FAQDto> getAllFAQ() {
-        List<FAQ> employees = faqRepository.findAll();
-        return employees.stream()
+        List<FAQ> faqs = faqRepository.findAll();
+        return faqs.stream()
                 .map(Converter::convertFAQToFAQDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/active")
     public List<FAQDto> getAllActiveFAQ() {
-        List<FAQ> employees = faqRepository.findAllByIsActive(true);
-        return employees.stream()
+        List<FAQ> faqs = faqRepository.findAllByIsActive(true);
+        return faqs.stream()
                 .map(Converter::convertFAQToFAQDto)
                 .collect(Collectors.toList());
     }
