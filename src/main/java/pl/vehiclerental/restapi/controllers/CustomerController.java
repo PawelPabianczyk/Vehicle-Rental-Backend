@@ -168,4 +168,14 @@ public class CustomerController {
         customerRepository.save(customer);
         return ResponseEntity.ok("Customer added successfully");
     }
+
+    @PostMapping("/getCustomersStatus")
+    @PreAuthorize("hasRole('REGULAR') or hasRole('USER')")
+    public ResponseEntity<?> getCustomersStatus(@RequestBody CustomerDto customerDto) throws JSONException {
+        Customer customer = customerRepository.findById(customerDto.getId()).get();
+        JSONObject jCustomer = new JSONObject();
+        jCustomer.put("status", customer.getVerified());
+
+        return ResponseEntity.ok(jCustomer.toString());
+    }
 }
