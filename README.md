@@ -62,9 +62,9 @@ You can use any IDE that supports MySQL (e.g. PHPMyAdmin) or directly via the My
 
 ## Usage
 To use the application fully, you must download the frontend application [Vehicle-Rental-Frontend](https://github.com/krystian4/Vehicle-Rental-Frontend).<br/><br/>
-Sample screenshots from Postman:
-![Main Page](/images/01.png)
+### Sample screenshots from Postman:
 
+![Main Page](/images/01.png)
 An example of a successful login.<br/><br/>
 
 ![Main Page](/images/02.png)
