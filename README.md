@@ -65,6 +65,7 @@ To use the application fully, you must download the frontend application [Vehicl
 ### Sample screenshots from Postman:
 
 ![Main Page](/images/01.png)
+
 An example of a successful login.<br/><br/>
 
 ![Main Page](/images/02.png)
