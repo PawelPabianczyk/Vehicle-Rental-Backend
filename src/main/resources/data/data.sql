@@ -49,6 +49,16 @@ VALUES (1, 'Jan', 'Kowalski', '1990-01-01', 'Urzednicza 3', 'Krakow', 'Polska', 
        (7, 'imie7', 'nazwisko7', '1992-07-01', 'ulica 7', 'miasto', 'kraj', '373456789', 7, true),
        (8, 'imie8', 'nazwisko8', '1992-08-01', 'ulica 8', 'miasto', 'kraj', '383456789', 8, true),
        (9, 'imie9', 'nazwisko9', '1992-09-01', 'ulica 9', 'miasto', 'kraj', '393456789', 9, true),
-       (10, 'imie10', 'nazwisko10', '1992-10-01', 'ulica 10', 'miasto', 'kraj', '103456789', 10, true),
-       (11, 'imie11', 'nazwisko11', '1992-11-01', 'ulica 11', 'miasto', 'kraj', '113456789', 11, true),
-       (12, 'imie12', 'nazwisko12', '1992-12-01', 'ulica 12', 'miasto', 'kraj', '121456789', 12, true);
+       (10, 'imie10', 'nazwisko10', '1992-10-01', 'ulica 10', 'miasto', 'kraj', '103456789', 10, false),
+       (11, 'imie11', 'nazwisko11', '1992-11-01', 'ulica 11', 'miasto', 'kraj', '113456789', 11, false),
+       (12, 'imie12', 'nazwisko12', '1992-12-01', 'ulica 12', 'miasto', 'kraj', '121456789', 12, false);
+INSERT INTO customers(id, driving_license_number, is_verified, user_id, is_active)
+VALUES (4, '44444', true, 4, true),
+       (5, '55555', true, 5, true),
+       (6, '66666', true, 6, true),
+       (7, '77777', false, 7, true),
+       (8, '88888', false, 8, true),
+       (9, '99999', false, 9, true),
+       (10, '10101', false, 10, false),
+       (11, '11111', false, 11, false),
+       (12, '12121', false, 12, false);
