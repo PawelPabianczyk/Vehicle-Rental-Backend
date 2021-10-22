@@ -118,7 +118,6 @@ public class VehicleController {
                 insuranceDto.getPrice()
         );
         insurance.setVehicle(vehicle);
-        insuranceRepository.save(insurance);
 
         InspectionDto inspectionDto = addVehicleRequest.getInspectionDto();
 
@@ -128,9 +127,10 @@ public class VehicleController {
                 inspectionDto.getPrice()
         );
         inspection.setVehicle(vehicle);
-        inspectionRepository.save(inspection);
-
         vehicleRepository.save(vehicle);
+        inspectionRepository.save(inspection);
+        insuranceRepository.save(insurance);
+
         return ResponseEntity.ok(new MessageResponse("Vehicle added successfully!"));
     }
 
